@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
 
+#include "utils.h"
 #include "sprite.h"
 #include "actor.h"
 #include "bg_actor.h"
@@ -16,6 +17,12 @@ enum
     WAYPOINT_TEXTURE,
     NUM_TEXTURES
 };
+
+typedef enum GAME_STATE
+{
+    GAME_STATE_WAYPOINT_CLICKED,
+    GAME_STATE_NUM_STATES
+} GAME_STATE;
 
 typedef struct engine engine;
 struct engine
@@ -32,6 +39,12 @@ struct engine
 
     SDL_Window *window;
     SDL_Renderer *renderer;
+
+    // mouse coords this frame
+    Sint32 x_mouse;
+    Sint32 y_mouse;
+
+    bool active_states[GAME_STATE_NUM_STATES];
 
     actor_list *render_list;
     actor_list *logic_list;

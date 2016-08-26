@@ -10,4 +10,5 @@ struct waypoint_actor {
 };
 
 waypoint_actor *waypoint_actor_init(waypoint_actor *wpa);
+bool waypoint_actor_touched(waypoint_actor * wpa, unsigned int x, unsigned int y);
 #endif

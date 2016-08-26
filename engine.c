@@ -6,6 +6,7 @@
 void setup_textures();
 void setup_decals();
 void setup_actors();
+void setup_active_states();
 void loop_handler();
 
 engine *engine_init()
@@ -36,6 +37,8 @@ engine *engine_init()
     eng.render_list = NULL;
 
     setup_actors();
+
+    setup_active_states();
 
     return &eng;
 }
@@ -103,6 +106,15 @@ void setup_actors()
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor));
 }
 
+void setup_active_states()
+{
+    unsigned int i;
+    for (i = 0; i < ARRAY_SIZE(eng.active_states); i++)
+    {
+        eng.active_states[i] = false;
+    }
+}
+
 bool should_continue_logic_loops()
 {
     if (eng.should_start_logic_loop) {
@@ -124,9 +136,37 @@ bool should_continue_logic_loops()
     return true;
 }
 
+void process_input()
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event))
+    {
+        switch(event.type)
+        {
+            case SDL_MOUSEMOTION:
+                eng.x_mouse = event.motion.x;
+                eng.y_mouse = event.motion.y;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (waypoint_actor_touched(
+                            &eng.waypoint_actor,
+                            eng.x_mouse, eng.y_mouse))
+                {
+                   eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = true;
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = false;
+                break;
+        }
+    }
+}
+
 void loop_handler()
 {
     SDL_RenderClear(eng.renderer);
+    process_input();
 
     actor_list *al;
     for (al = eng.render_list; al != NULL; al = al->next) {

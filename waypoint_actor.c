@@ -9,7 +9,12 @@ void waypoint_render_handler(actor *a)
 void waypoint_logic_handler(actor *a)
 {
    waypoint_actor *wap = (waypoint_actor *)a;
-   wap->sprite.r[0] += 1;
+
+   if (eng.active_states[GAME_STATE_WAYPOINT_CLICKED])
+   {
+       wap->sprite.r[0] = eng.x_mouse - WAYPOINT_W / 2;
+       wap->sprite.r[1] = eng.y_mouse - WAYPOINT_H / 2;
+   }
 }
 
 waypoint_actor *waypoint_actor_init(waypoint_actor *wpa)
@@ -20,8 +25,13 @@ waypoint_actor *waypoint_actor_init(waypoint_actor *wpa)
             WAYPOINT_W,
             WAYPOINT_H,
             &eng.waypoint_decal);
-    wpa->sprite.r[0] = 40;
-    wpa->sprite.r[1] = 40;
+    wpa->sprite.r[0] = 0;
+    wpa->sprite.r[1] = 0;
 
     return wpa;
+}
+
+bool waypoint_actor_touched(waypoint_actor * wpa, unsigned int x, unsigned int y)
+{
+    return vec_mag_sq(x - (wpa->sprite.r[0] + WAYPOINT_W / 2.), y - (wpa->sprite.r[1] + WAYPOINT_W / 2.)) < (WAYPOINT_W / 2.) * (WAYPOINT_W / 2.);
 }
