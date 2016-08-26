@@ -1,7 +1,9 @@
 #include "engine.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#if EMSCRIPTEN
 #include <emscripten.h>
+#endif
 
 void setup_textures();
 void setup_decals();
@@ -47,7 +49,14 @@ void engine_start()
 {
     eng.start_time = SDL_GetTicks();
 
+#ifdef EMSCRIPTEN
     emscripten_set_main_loop(loop_handler, -1, 0);
+#else
+    while (!eng.active_states[GAME_STATE_QUIT])
+    {
+        loop_handler();
+    }
+#endif
 }
 
 void setup_textures()
@@ -158,6 +167,9 @@ void process_input()
                 break;
             case SDL_MOUSEBUTTONUP:
                 eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = false;
+                break;
+            case SDL_QUIT:
+                eng.active_states[GAME_STATE_QUIT] = true;
                 break;
         }
     }
