@@ -39,6 +39,7 @@ engine *engine_init()
     eng.render_list = NULL;
 
     setup_actors();
+    eng.clicked_waypoint = NULL;
 
     setup_active_states();
 
@@ -107,9 +108,17 @@ void setup_decals()
 
 void setup_actors()
 {
-    waypoint_actor_init(&eng.waypoint_actor);
-    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.waypoint_actor));
-    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor));
+    unsigned int i;
+
+    int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{0, 0}, {100, 100}};
+    for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
+    {
+        waypoint_actor_init(&eng.waypoint_actor[i]);
+        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.waypoint_actor[i]));
+        eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor[i]));
+        eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
+        eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
+    }
 
     bg_actor_init(&eng.bg_actor);
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor));
@@ -145,6 +154,21 @@ bool should_continue_logic_loops()
     return true;
 }
 
+void check_waypoint_clicks()
+{
+    unsigned int i;
+    for (i = 0; i< NUM_WAYPOINT_ACTORS; i++)
+    {
+        if (waypoint_actor_touched(
+                    &eng.waypoint_actor[i],
+                    eng.x_mouse, eng.y_mouse))
+        {
+            eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = true;
+            eng.clicked_waypoint = &eng.waypoint_actor[i];
+        }
+    }
+}
+
 void process_input()
 {
     SDL_Event event;
@@ -158,12 +182,7 @@ void process_input()
                 eng.y_mouse = event.motion.y;
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                if (waypoint_actor_touched(
-                            &eng.waypoint_actor,
-                            eng.x_mouse, eng.y_mouse))
-                {
-                   eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = true;
-                }
+                check_waypoint_clicks();
                 break;
             case SDL_MOUSEBUTTONUP:
                 eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = false;

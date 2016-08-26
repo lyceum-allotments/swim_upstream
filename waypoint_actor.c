@@ -8,12 +8,12 @@ void waypoint_render_handler(actor *a)
 
 void waypoint_logic_handler(actor *a)
 {
-   waypoint_actor *wap = (waypoint_actor *)a;
+   waypoint_actor *wpa = (waypoint_actor *)a;
 
-   if (eng.active_states[GAME_STATE_WAYPOINT_CLICKED])
+   if (eng.active_states[GAME_STATE_WAYPOINT_CLICKED] && eng.clicked_waypoint == wpa)
    {
-       wap->sprite.r[0] = eng.x_mouse - WAYPOINT_W / 2;
-       wap->sprite.r[1] = eng.y_mouse - WAYPOINT_H / 2;
+       wpa->sprite.r[0] = eng.x_mouse - WAYPOINT_W / 2;
+       wpa->sprite.r[1] = eng.y_mouse - WAYPOINT_H / 2;
    }
 }
 

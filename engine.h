@@ -25,6 +25,13 @@ typedef enum GAME_STATE
     GAME_STATE_NUM_STATES
 } GAME_STATE;
 
+enum
+{
+    WAYPOINT_W = 30,
+    WAYPOINT_H = 30,
+    NUM_WAYPOINT_ACTORS = 2
+};
+
 typedef struct engine engine;
 struct engine
 {
@@ -56,13 +63,8 @@ struct engine
 
     bg_actor bg_actor;
 
-    waypoint_actor waypoint_actor;
-};
-
-enum
-{
-    WAYPOINT_W = 30,
-    WAYPOINT_H = 30
+    waypoint_actor waypoint_actor[NUM_WAYPOINT_ACTORS];
+    waypoint_actor *clicked_waypoint;
 };
 
 engine eng;
