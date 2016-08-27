@@ -54,3 +54,21 @@ bool waypoint_actor_touched(waypoint_actor * wpa, unsigned int x, unsigned int y
 {
     return vec_mag_sq(x - (wpa->sprite.r[0] + WAYPOINT_W / 2.), y - (wpa->sprite.r[1] + WAYPOINT_W / 2.)) < (WAYPOINT_W / 2.) * (WAYPOINT_W / 2.);
 }
+
+
+waypoint_actor *anchorpoint_actor_init(waypoint_actor *this)
+{
+    actor_init(&this->a, waypoint_render_handler, NULL);
+    sprite_init(
+            &this->sprite,
+            WAYPOINT_W,
+            WAYPOINT_H,
+            &eng.anchorpoint_decal);
+    this->sprite.r[0] = 0;
+    this->sprite.r[1] = 0;
+
+    this->linkline_left = NULL;
+    this->linkline_right = NULL;
+
+    return this;
+}

@@ -16,6 +16,7 @@ enum
 {
     BG_TEXTURE,
     WAYPOINT_TEXTURE,
+    ANCHORPOINT_TEXTURE,
     LINKLINE_TEXTURE,
     NUM_TEXTURES
 };
@@ -32,7 +33,7 @@ enum
     WAYPOINT_W = 30,
     WAYPOINT_H = 30,
     LINKLINE_W = 18,
-    NUM_WAYPOINT_ACTORS = 2,
+    NUM_WAYPOINT_ACTORS = 4,
     NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1
 };
 
@@ -64,6 +65,7 @@ struct engine
     SDL_Texture *textures[NUM_TEXTURES];
     decal bg_decal;
     decal waypoint_decal;
+    decal anchorpoint_decal;
     decal linkline_decal;
 
     bg_actor bg_actor;

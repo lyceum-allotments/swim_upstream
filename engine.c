@@ -14,7 +14,7 @@ void loop_handler();
 engine *engine_init()
 {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
+    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
     eng.fps = 80;
     eng.current_frame = 0;
@@ -67,6 +67,7 @@ void setup_textures()
     char * filenames[] = {
         "assets/bg.png",
         "assets/waypoint.png",
+        "assets/anchorpoint.png",
         "assets/linkline.png"
     };
     int i;
@@ -108,6 +109,14 @@ void setup_decals()
         WAYPOINT_W,
         WAYPOINT_H);
 
+    decal_init(
+        &(eng.anchorpoint_decal),
+        eng.textures[ANCHORPOINT_TEXTURE],
+        0,
+        0,
+        WAYPOINT_W,
+        WAYPOINT_H);
+
     SDL_QueryTexture(eng.textures[LINKLINE_TEXTURE],
             NULL, NULL, &imgw, &imgh);
     
@@ -124,12 +133,18 @@ void setup_actors()
 {
     unsigned int i;
 
-    int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {100, 100}};
+    int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {50, 50}, {400, 350}, {600, 500}};
     for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
     {
-        waypoint_actor_init(&eng.waypoint_actor[i]);
+        if (i == 0 || i == NUM_WAYPOINT_ACTORS - 1)
+            anchorpoint_actor_init(&eng.waypoint_actor[i]);
+        else
+        {
+            waypoint_actor_init(&eng.waypoint_actor[i]);
+            eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor[i]));
+        }
+
         eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.waypoint_actor[i]));
-        eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor[i]));
         eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
         eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
     }
