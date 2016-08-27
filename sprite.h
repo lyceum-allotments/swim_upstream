@@ -10,6 +10,8 @@ struct sprite
     int w;
     int h;
     int r[2];
+    double rot_angle;
+    int rot_centre[2];
 
     decal *d;
 };

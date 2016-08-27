@@ -9,12 +9,14 @@
 #include "sprite.h"
 #include "actor.h"
 #include "bg_actor.h"
+#include "linkline_actor.h"
 #include "waypoint_actor.h"
 
 enum
 {
     BG_TEXTURE,
     WAYPOINT_TEXTURE,
+    LINKLINE_TEXTURE,
     NUM_TEXTURES
 };
 
@@ -29,7 +31,9 @@ enum
 {
     WAYPOINT_W = 30,
     WAYPOINT_H = 30,
-    NUM_WAYPOINT_ACTORS = 2
+    LINKLINE_W = 18,
+    NUM_WAYPOINT_ACTORS = 2,
+    NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1
 };
 
 typedef struct engine engine;
@@ -60,11 +64,14 @@ struct engine
     SDL_Texture *textures[NUM_TEXTURES];
     decal bg_decal;
     decal waypoint_decal;
+    decal linkline_decal;
 
     bg_actor bg_actor;
 
     waypoint_actor waypoint_actor[NUM_WAYPOINT_ACTORS];
     waypoint_actor *clicked_waypoint;
+
+    linkline_actor linkline_actor[NUM_LINKLINE_ACTORS];
 };
 
 engine eng;
