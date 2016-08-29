@@ -5,6 +5,9 @@
 #include <emscripten.h>
 #endif
 
+
+#include "level1.h"
+
 void setup_textures();
 void setup_decals();
 void setup_actors();
@@ -40,10 +43,13 @@ engine *engine_init()
 
     eng.render_list = NULL;
 
+    eng.level_bytes = level1_array;
+
     setup_actors();
     eng.clicked_waypoint = NULL;
 
     setup_active_states();
+
 
     return &eng;
 }
@@ -65,7 +71,7 @@ void engine_start()
 void setup_textures()
 {
     char * filenames[] = {
-        "assets/bg.png",
+        "assets/level1.png",
         "assets/waypoint.png",
         "assets/anchorpoint.png",
         "assets/linkline.png",

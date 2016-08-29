@@ -33,10 +33,14 @@ void fish_logic_handler(actor *a)
     if (fish->next_wp_index == NUM_WAYPOINT_ACTORS)
         return;
 
-    fish->pos[0] += fish->speed * fish->direction[0];
-    fish->pos[1] += fish->speed * fish->direction[1];
+    unsigned char level_byte = eng.level_bytes[80 * (int)(fish->pos[1]/10) + (int)(fish->pos[0]/10)];
 
-    fish->fraction_complete += fish->speed / fish->total_distance_to_travel;
+    double speed_multiplier = (9 * (double)level_byte / 0xFF) + 1;
+
+    fish->pos[0] += fish->speed * fish->direction[0] * speed_multiplier;
+    fish->pos[1] += fish->speed * fish->direction[1] * speed_multiplier;
+
+    fish->fraction_complete += (fish->speed * speed_multiplier) / fish->total_distance_to_travel;
 
     if (fish->fraction_complete > 1)
     {
@@ -72,7 +76,7 @@ fish_actor *fish_actor_init(fish_actor *this)
     this->direction[0] = 0;
     this->direction[1] = 0;
 
-    this->speed = 1.0;
+    this->speed = 0.25;
 
     this->fraction_complete = 1;
 

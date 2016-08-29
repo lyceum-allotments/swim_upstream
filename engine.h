@@ -82,6 +82,8 @@ struct engine
     linkline_actor linkline_actor[NUM_LINKLINE_ACTORS];
 
     fish_actor fish_actor;
+
+    unsigned char *level_bytes;
 };
 
 engine eng;
