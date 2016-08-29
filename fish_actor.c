@@ -13,8 +13,8 @@ void fish_render_handler(actor *a)
 void calculate_direction_and_distance(fish_actor *this)
 {
     int x_from, y_from, x_to, y_to;
-    waypoint_actor_get_pos(&eng.waypoint_actor[this->wp_from_index], &x_from, &y_from);
-    waypoint_actor_get_pos(&eng.waypoint_actor[this->wp_to_index], &x_to, &y_to);
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index-1], &x_from, &y_from);
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index], &x_to, &y_to);
 
     this->direction[0] = (double)(x_to - x_from);
     this->direction[1] = (double)(y_to - y_from);
@@ -26,32 +26,33 @@ void calculate_direction_and_distance(fish_actor *this)
 
 void fish_logic_handler(actor *a)
 {
-   fish_actor *fish = (fish_actor *)a;
+    if (!eng.active_states[GAME_STATE_SWIM_IN_PROGRESS])
+        return;
+    fish_actor *fish = (fish_actor *)a;
 
-   if (fish->wp_to_index == NUM_WAYPOINT_ACTORS)
-       return;
+    if (fish->next_wp_index == NUM_WAYPOINT_ACTORS)
+        return;
 
-   fish->pos[0] += fish->speed * fish->direction[0];
-   fish->pos[1] += fish->speed * fish->direction[1];
+    fish->pos[0] += fish->speed * fish->direction[0];
+    fish->pos[1] += fish->speed * fish->direction[1];
 
-   fish->fraction_complete += fish->speed / fish->total_distance_to_travel;
+    fish->fraction_complete += fish->speed / fish->total_distance_to_travel;
 
-   if (fish->fraction_complete > 1)
-   {
-       fish->wp_from_index += 1;
-       fish->wp_to_index += 1;
+    if (fish->fraction_complete > 1)
+    {
+        fish->next_wp_index += 1;
 
-       int x, y;
-       waypoint_actor_get_pos(&eng.waypoint_actor[fish->wp_from_index], &x, &y);
-       fish->pos[0] = (double)x;
-       fish->pos[1] = (double)y;
+        int x, y;
+        waypoint_actor_get_pos(&eng.waypoint_actor[fish->next_wp_index-1], &x, &y);
+        fish->pos[0] = (double)x;
+        fish->pos[1] = (double)y;
 
-       calculate_direction_and_distance(fish);
-       fish->fraction_complete = 0;
-   }
+        calculate_direction_and_distance(fish);
+        fish->fraction_complete = 0;
+    }
 }
 
-fish_actor *fish_actor_init(fish_actor *this, int wp_from_index, int wp_to_index)
+fish_actor *fish_actor_init(fish_actor *this)
 {
     actor_init(&this->a, fish_render_handler, fish_logic_handler);
     sprite_init(
@@ -62,17 +63,18 @@ fish_actor *fish_actor_init(fish_actor *this, int wp_from_index, int wp_to_index
     this->sprite.r[0] = 0;
     this->sprite.r[1] = 0;
 
-    this->wp_from_index = wp_from_index;
-    this->wp_to_index = wp_to_index;
+    this->next_wp_index = 0;
 
     int x, y;
-    waypoint_actor_get_pos(&eng.waypoint_actor[wp_from_index], &x, &y);
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index], &x, &y);
     this->pos[0] = (double)x;
     this->pos[1] = (double)y;
+    this->direction[0] = 0;
+    this->direction[1] = 0;
 
     this->speed = 1.0;
 
-    calculate_direction_and_distance(this);
+    this->fraction_complete = 1;
 
     return this;
 }

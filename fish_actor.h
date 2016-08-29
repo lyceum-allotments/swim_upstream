@@ -15,9 +15,8 @@ struct fish_actor {
     double total_distance_to_travel;
     double fraction_complete;
 
-    int wp_from_index;
-    int wp_to_index;
+    int next_wp_index;
 };
 
-fish_actor *fish_actor_init(fish_actor *this, int wp_from, int wp_to);
+fish_actor *fish_actor_init(fish_actor *this);
 #endif

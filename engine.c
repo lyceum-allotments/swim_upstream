@@ -161,7 +161,7 @@ void setup_actors()
         eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
     }
 
-    fish_actor_init(&eng.fish_actor, 0, 1);
+    fish_actor_init(&eng.fish_actor);
 
     for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
     {
@@ -215,6 +215,11 @@ bool should_continue_logic_loops()
 
 void check_waypoint_clicks()
 {
+    if (eng.active_states[GAME_STATE_SWIM_IN_PROGRESS])
+    {
+        return;
+    }
+
     unsigned int i;
     for (i = 0; i< NUM_WAYPOINT_ACTORS; i++)
     {
@@ -245,6 +250,10 @@ void process_input()
                 break;
             case SDL_MOUSEBUTTONUP:
                 eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = false;
+                break;
+            case SDL_KEYDOWN:
+                if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+                    eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
                 break;
             case SDL_QUIT:
                 eng.active_states[GAME_STATE_QUIT] = true;
