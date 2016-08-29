@@ -11,6 +11,7 @@
 #include "bg_actor.h"
 #include "linkline_actor.h"
 #include "waypoint_actor.h"
+#include "fish_actor.h"
 
 enum
 {
@@ -18,6 +19,7 @@ enum
     WAYPOINT_TEXTURE,
     ANCHORPOINT_TEXTURE,
     LINKLINE_TEXTURE,
+    FISH_TEXTURE,
     NUM_TEXTURES
 };
 
@@ -33,6 +35,8 @@ enum
     WAYPOINT_W = 30,
     WAYPOINT_H = 30,
     LINKLINE_W = 18,
+    FISH_W = 50,
+    FISH_H = 50,
     NUM_WAYPOINT_ACTORS = 4,
     NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1
 };
@@ -67,6 +71,7 @@ struct engine
     decal waypoint_decal;
     decal anchorpoint_decal;
     decal linkline_decal;
+    decal fish_decal;
 
     bg_actor bg_actor;
 
@@ -74,6 +79,8 @@ struct engine
     waypoint_actor *clicked_waypoint;
 
     linkline_actor linkline_actor[NUM_LINKLINE_ACTORS];
+
+    fish_actor fish_actor;
 };
 
 engine eng;

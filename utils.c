@@ -18,3 +18,11 @@ double vec_arg(double x, double y)
         return 180 + arg;
     return arg;
 }
+
+void vec_norm(double *x, double *y)
+{
+    double mag = vec_mag(*x, *y);
+
+    *x /= mag;
+    *y /= mag;
+}

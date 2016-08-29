@@ -68,7 +68,8 @@ void setup_textures()
         "assets/bg.png",
         "assets/waypoint.png",
         "assets/anchorpoint.png",
-        "assets/linkline.png"
+        "assets/linkline.png",
+        "assets/fish.png"
     };
     int i;
 
@@ -127,10 +128,21 @@ void setup_decals()
         0,
         imgw,
         imgh);
+
+    decal_init(
+        &(eng.fish_decal),
+        eng.textures[FISH_TEXTURE],
+        0,
+        0,
+        FISH_W,
+        FISH_H);
 }
 
 void setup_actors()
 {
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor));
+    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor));
+
     unsigned int i;
 
     int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {50, 50}, {400, 350}, {600, 500}};
@@ -148,6 +160,8 @@ void setup_actors()
         eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
         eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
     }
+
+    fish_actor_init(&eng.fish_actor, 0, 1);
 
     for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
     {
