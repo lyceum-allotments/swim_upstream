@@ -29,6 +29,9 @@ engine *engine_init()
     eng.should_start_logic_loop = true;
     eng.whole_frames_to_do = 0;
 
+    eng.swim_start_time = 0;
+    eng.swim_time = 0;
+
     SDL_CreateWindowAndRenderer(eng.w, eng.h, 0, &eng.window, &eng.renderer);
 
     if(eng.window == NULL) {
@@ -144,6 +147,7 @@ void setup_decals()
         FISH_H);
 }
 
+int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {50, 50}, {400, 350}, {600, 500}};
 void setup_actors()
 {
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor));
@@ -151,7 +155,6 @@ void setup_actors()
 
     unsigned int i;
 
-    int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {50, 50}, {400, 350}, {600, 500}};
     for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
     {
         if (i == 0 || i == NUM_WAYPOINT_ACTORS - 1)
@@ -259,12 +262,48 @@ void process_input()
                 break;
             case SDL_KEYDOWN:
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                    eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
+                    if (!eng.active_states[GAME_STATE_LEVEL_FINISHED])
+                        eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
+                if (event.key.keysym.sym == SDLK_r)
+                    eng.active_states[GAME_STATE_LEVEL_RESTART] = true;
                 break;
             case SDL_QUIT:
                 eng.active_states[GAME_STATE_QUIT] = true;
                 break;
         }
+    }
+}
+
+void eng_logic_handler()
+{
+    if (eng.active_states[GAME_STATE_LEVEL_RESTART])
+    {
+        eng.swim_start_time = 0;
+        eng.swim_time = 0;
+
+        int i;
+        for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
+        {
+            eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
+            eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
+        }
+
+        for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
+        {
+            int wp_x, wp_y;
+            waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
+            linkline_actor_move_first_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
+
+            waypoint_actor_get_pos(&eng.waypoint_actor[i+1], &wp_x, &wp_y);
+            linkline_actor_move_second_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
+        }
+
+        fish_actor_update_next_wp_index(&eng.fish_actor, 1);
+        eng.fish_actor.next_wp_index = 0;
+        eng.fish_actor.fraction_complete = 1;
+
+        eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
+        eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
     }
 }
 
@@ -279,6 +318,7 @@ void loop_handler()
     }
 
     while (should_continue_logic_loops()) {
+        eng_logic_handler();
         for (al = eng.logic_list; al != NULL; al = al->next) {
             al->a->logic_handler(al->a);
         }

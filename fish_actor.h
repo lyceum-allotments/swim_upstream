@@ -19,4 +19,5 @@ struct fish_actor {
 };
 
 fish_actor *fish_actor_init(fish_actor *this);
+fish_actor *fish_actor_update_next_wp_index(fish_actor *this, int wp_index);
 #endif

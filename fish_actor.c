@@ -26,12 +26,22 @@ void calculate_direction_and_distance(fish_actor *this)
 
 void fish_logic_handler(actor *a)
 {
-    if (!eng.active_states[GAME_STATE_SWIM_IN_PROGRESS])
+    if (!eng.active_states[GAME_STATE_SWIM_IN_PROGRESS]
+            || eng.active_states[GAME_STATE_LEVEL_FINISHED])
         return;
+    else if (!eng.swim_start_time)
+        eng.swim_start_time = SDL_GetTicks();
+    eng.swim_time = SDL_GetTicks() - eng.swim_start_time;
+
     fish_actor *fish = (fish_actor *)a;
 
     if (fish->next_wp_index == NUM_WAYPOINT_ACTORS)
+    {
+        printf("The fish swam the course in %f seconds \n", (double)eng.swim_time / 1000.0);
+        eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
+        eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
         return;
+    }
 
     unsigned char level_byte = eng.level_bytes[80 * (int)(fish->pos[1]/10) + (int)(fish->pos[0]/10)];
 
@@ -44,16 +54,22 @@ void fish_logic_handler(actor *a)
 
     if (fish->fraction_complete > 1)
     {
-        fish->next_wp_index += 1;
-
-        int x, y;
-        waypoint_actor_get_pos(&eng.waypoint_actor[fish->next_wp_index-1], &x, &y);
-        fish->pos[0] = (double)x;
-        fish->pos[1] = (double)y;
-
-        calculate_direction_and_distance(fish);
-        fish->fraction_complete = 0;
+        fish_actor_update_next_wp_index(fish, fish->next_wp_index + 1);
     }
+}
+
+fish_actor *fish_actor_update_next_wp_index(fish_actor * this, int wp_index)
+{
+    this->next_wp_index = wp_index;
+
+    int x, y;
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index-1], &x, &y);
+    this->pos[0] = (double)x;
+    this->pos[1] = (double)y;
+
+    calculate_direction_and_distance(this);
+    this->fraction_complete = 0;
+    return this;
 }
 
 fish_actor *fish_actor_init(fish_actor *this)

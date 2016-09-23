@@ -27,6 +27,8 @@ typedef enum GAME_STATE
 {
     GAME_STATE_WAYPOINT_CLICKED,
     GAME_STATE_SWIM_IN_PROGRESS,
+    GAME_STATE_LEVEL_FINISHED,
+    GAME_STATE_LEVEL_RESTART,
     GAME_STATE_QUIT,
     GAME_STATE_NUM_STATES
 } GAME_STATE;
@@ -54,6 +56,9 @@ struct engine
     Uint32 start_time;
     bool should_start_logic_loop;
     unsigned int whole_frames_to_do;
+
+    Uint32 swim_start_time;
+    Uint32 swim_time;
 
     SDL_Window *window;
     SDL_Renderer *renderer;
