@@ -18,6 +18,7 @@ engine *engine_init()
 {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1");
+    TTF_Init();
 
     eng.fps = 80;
     eng.current_frame = 0;
@@ -29,8 +30,7 @@ engine *engine_init()
     eng.should_start_logic_loop = true;
     eng.whole_frames_to_do = 0;
 
-    eng.swim_start_time = 0;
-    eng.swim_time = 0;
+    eng.frames_swimming = 0;
 
     SDL_CreateWindowAndRenderer(eng.w, eng.h, 0, &eng.window, &eng.renderer);
 
@@ -150,6 +150,10 @@ void setup_decals()
 int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {50, 50}, {400, 350}, {600, 500}};
 void setup_actors()
 {
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor));
+    eng.logic_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor));
+    hud_actor_init(&eng.hud_actor);
+
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor));
     eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor));
 
@@ -277,11 +281,12 @@ void process_input()
 
 void eng_logic_handler()
 {
+    if (eng.active_states[GAME_STATE_SWIM_IN_PROGRESS])
+    {
+        eng.frames_swimming += 1;
+    }
     if (eng.active_states[GAME_STATE_LEVEL_RESTART])
     {
-        eng.swim_start_time = 0;
-        eng.swim_time = 0;
-
         int i;
         for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
         {
@@ -302,6 +307,8 @@ void eng_logic_handler()
         fish_actor_update_next_wp_index(&eng.fish_actor, 1);
         eng.fish_actor.next_wp_index = 0;
         eng.fish_actor.fraction_complete = 1;
+
+        eng.frames_swimming = 0;
 
         eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
         eng.active_states[GAME_STATE_LEVEL_RESTART] = false;

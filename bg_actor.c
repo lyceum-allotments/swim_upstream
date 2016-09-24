@@ -16,6 +16,5 @@ bg_actor *bg_actor_init(bg_actor *bg)
             &eng.bg_decal);
     bg->sprite.r[0] = 0;
     bg->sprite.r[1] = 0;
-
     return bg;
 }

@@ -29,15 +29,11 @@ void fish_logic_handler(actor *a)
     if (!eng.active_states[GAME_STATE_SWIM_IN_PROGRESS]
             || eng.active_states[GAME_STATE_LEVEL_FINISHED])
         return;
-    else if (!eng.swim_start_time)
-        eng.swim_start_time = SDL_GetTicks();
-    eng.swim_time = SDL_GetTicks() - eng.swim_start_time;
 
     fish_actor *fish = (fish_actor *)a;
 
     if (fish->next_wp_index == NUM_WAYPOINT_ACTORS)
     {
-        printf("The fish swam the course in %f seconds \n", (double)eng.swim_time / 1000.0);
         eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
         eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
         return;

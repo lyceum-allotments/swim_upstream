@@ -3,11 +3,13 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 #include <stdbool.h>
 
 #include "utils.h"
 #include "sprite.h"
 #include "actor.h"
+#include "hud_actor.h"
 #include "bg_actor.h"
 #include "linkline_actor.h"
 #include "waypoint_actor.h"
@@ -41,8 +43,11 @@ enum
     FISH_W = 50,
     FISH_H = 50,
     NUM_WAYPOINT_ACTORS = 4,
-    NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1
+    NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1,
+    TIMER_TEXT_SIZE = 30
 };
+
+#define TIMER_TEXT_FONT "assets/FreeSans.ttf"
 
 typedef struct engine engine;
 struct engine
@@ -57,8 +62,7 @@ struct engine
     bool should_start_logic_loop;
     unsigned int whole_frames_to_do;
 
-    Uint32 swim_start_time;
-    Uint32 swim_time;
+    unsigned int frames_swimming;
 
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -87,6 +91,8 @@ struct engine
     linkline_actor linkline_actor[NUM_LINKLINE_ACTORS];
 
     fish_actor fish_actor;
+
+    hud_actor hud_actor;
 
     unsigned char *level_bytes;
 };
