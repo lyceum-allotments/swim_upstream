@@ -224,7 +224,8 @@ bool should_continue_logic_loops()
 
 void check_waypoint_clicks()
 {
-    if (eng.active_states[GAME_STATE_SWIM_IN_PROGRESS])
+    if (eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] 
+            || eng.active_states[GAME_STATE_LEVEL_FINISHED])
     {
         return;
     }
