@@ -44,7 +44,8 @@ enum
     FISH_H = 50,
     NUM_WAYPOINT_ACTORS = 4,
     NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1,
-    TIMER_TEXT_SIZE = 30
+    TIMER_TEXT_SIZE = 30,
+    END_TIME_TEXT_SIZE = 80
 };
 
 #define TIMER_TEXT_FONT "assets/FreeSans.ttf"

@@ -36,6 +36,7 @@ void fish_logic_handler(actor *a)
     {
         eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
         eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
+        level_end_screen_time_refresh(&eng.hud_actor.level_end_screen);
         return;
     }
 
