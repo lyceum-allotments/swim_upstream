@@ -32,7 +32,8 @@ typedef enum GAME_STATE
     GAME_STATE_LEVEL_FINISHED,
     GAME_STATE_LEVEL_RESTART,
     GAME_STATE_QUIT,
-    GAME_STATE_NUM_STATES
+    GAME_STATE_INTRO_FINISHED,
+    GAME_STATE_NUM_STATES,
 } GAME_STATE;
 
 enum
@@ -51,6 +52,10 @@ enum
 #define TIMER_TEXT_FONT "assets/FreeSans.ttf"
 
 typedef struct engine engine;
+typedef bool (*scene_finished_check)();
+typedef void (*scene_changed_handler)();
+#include "scenes.h"
+
 struct engine
 {
     unsigned int fps;
@@ -71,6 +76,9 @@ struct engine
     // mouse coords this frame
     Sint32 x_mouse;
     Sint32 y_mouse;
+
+    scene_finished_check scene_finished;
+    scene_changed_handler scene_change;
 
     bool active_states[GAME_STATE_NUM_STATES];
 
