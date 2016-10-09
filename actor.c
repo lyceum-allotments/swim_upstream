@@ -9,6 +9,20 @@ actor_list *actor_list_add(actor_list *al, actor *a)
     return new_node;
 }
 
+actor_list *actor_list_rm(actor_list *al, actor *a)
+{
+    if (al == NULL)
+        return NULL;
+    if (al->a == a)
+    {
+        actor_list *next = al->next;
+        free(al);
+        return next;
+    }
+    al->next = actor_list_rm(al->next, a);
+    return al;
+}
+
 actor *actor_init(
         actor *a,
         actor_render_handler render_handler,

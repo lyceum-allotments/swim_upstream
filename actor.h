@@ -20,6 +20,7 @@ struct actor_list
 
 
 actor_list *actor_list_add(actor_list *al, actor *a);
+actor_list *actor_list_rm(actor_list *al, actor *a);
 
 actor *actor_init(
         actor *a,
