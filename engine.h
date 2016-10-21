@@ -33,6 +33,7 @@ typedef enum GAME_STATE
     GAME_STATE_LEVEL_RESTART,
     GAME_STATE_QUIT,
     GAME_STATE_INTRO_FINISHED,
+    GAME_STATE_PROGRESS_TO_NEXT_LEVEL,
     GAME_STATE_NUM_STATES,
 } GAME_STATE;
 
@@ -103,7 +104,7 @@ struct engine
 
     hud_actor hud_actor;
 
-    unsigned char *level_bytes;
+    const unsigned char *level_bytes;
 };
 
 engine eng;

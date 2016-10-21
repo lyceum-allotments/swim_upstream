@@ -5,8 +5,6 @@
 #include <emscripten.h>
 #endif
 
-#include "level1_waypoint_initial_positions.h"
-
 void setup_active_states();
 void loop_handler();
 
@@ -133,8 +131,14 @@ void process_input()
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
                     if (!eng.active_states[GAME_STATE_LEVEL_FINISHED])
                         eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
-                if (event.key.keysym.sym == SDLK_r)
-                    eng.active_states[GAME_STATE_LEVEL_RESTART] = true;
+
+                if (eng.active_states[GAME_STATE_LEVEL_FINISHED])
+                {
+                    if (event.key.keysym.sym == SDLK_r)
+                        eng.active_states[GAME_STATE_LEVEL_RESTART] = true;
+                    if (event.key.keysym.sym == SDLK_y)
+                        eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = true;
+                }
                 else if (event.key.keysym.sym == SDLK_RETURN)
                     eng.active_states[GAME_STATE_INTRO_FINISHED] = true;
                 break;
@@ -150,34 +154,6 @@ void eng_logic_handler()
     if (eng.active_states[GAME_STATE_SWIM_IN_PROGRESS])
     {
         eng.frames_swimming += 1;
-    }
-    if (eng.active_states[GAME_STATE_LEVEL_RESTART])
-    {
-        int i;
-        for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
-        {
-            eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
-            eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
-        }
-
-        for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
-        {
-            int wp_x, wp_y;
-            waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
-            linkline_actor_move_first_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
-
-            waypoint_actor_get_pos(&eng.waypoint_actor[i+1], &wp_x, &wp_y);
-            linkline_actor_move_second_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
-        }
-
-        fish_actor_update_next_wp_index(&eng.fish_actor, 1);
-        eng.fish_actor.next_wp_index = 0;
-        eng.fish_actor.fraction_complete = 1;
-
-        eng.frames_swimming = 0;
-
-        eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
-        eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
     }
 }
 

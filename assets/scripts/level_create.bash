@@ -9,7 +9,7 @@ do
     # convert temp.png -define h:format=gray +antialias temp.h
     
     convert -sample 80x60 random_10_blobs.png -define h:format=gray -depth 8 test.h
-    sed "s/MagickImage/level1_array/" test.h > ../../level$i.h
+    sed "s/MagickImage/level$(($i + 1))_array/" test.h > ../../level$((i + 1)).h
     rm test.h
     
     convert -sample 80x60 random_10_blobs.png test.png

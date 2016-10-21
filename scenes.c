@@ -1,5 +1,8 @@
 #include "engine.h"
 
+void level1_repeat();
+void level1_level2_change();
+
 void intro_setup()
 {
     char * fname = "assets/intro_img.png";
@@ -39,6 +42,16 @@ bool intro_finished()
 
 bool level1_finished()
 {
+    if (eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL])
+    {
+        eng.scene_change = level1_level2_change;
+        return true;
+    }
+    if (eng.active_states[GAME_STATE_LEVEL_RESTART])
+    {
+        eng.scene_change = level1_repeat;
+        return true;
+    }
     return false;
 }
 
@@ -56,5 +69,42 @@ void intro_change()
     setup_actors();
     eng.clicked_waypoint = NULL;
     eng.scene_finished = level1_finished;
+
+    eng.scene_change = level1_level2_change;
     return;
+}
+
+void level1_repeat()
+{
+    int i;
+    for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
+    {
+        eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
+        eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
+    }
+
+    for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
+    {
+        int wp_x, wp_y;
+        waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
+        linkline_actor_move_first_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
+
+        waypoint_actor_get_pos(&eng.waypoint_actor[i+1], &wp_x, &wp_y);
+        linkline_actor_move_second_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
+    }
+
+    fish_actor_update_next_wp_index(&eng.fish_actor, 1);
+    eng.fish_actor.next_wp_index = 0;
+    eng.fish_actor.fraction_complete = 1;
+
+    eng.frames_swimming = 0;
+
+    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
+    eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
+}
+
+void level1_level2_change()
+{
+    printf("should transition to level 2 here\n");
+    eng.active_states[GAME_STATE_QUIT] = true;
 }
