@@ -35,6 +35,7 @@ engine *engine_init()
         return NULL;
     }
 
+    eng.textures[BG_TEXTURE] = NULL;
     intro_setup();
     eng.scene_finished = intro_finished;
     eng.scene_change = intro_change;

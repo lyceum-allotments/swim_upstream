@@ -2,25 +2,27 @@
 
 void level1_repeat();
 void level1_level2_change();
+void level2_level3_change();
 bool level2_finished();
 void level2_repeat();
+void level3_repeat();
 
-void intro_setup()
+void load_bg(const char *img_path)
 {
-    char * fname = "assets/intro_img.png";
-    SDL_Surface *img = IMG_Load(fname);
+    SDL_Surface *img = IMG_Load(img_path);
 
     if(!img){
-        fprintf(stdout, "Error! Could not load %s\n", fname);
+        fprintf(stdout, "Error! Could not load %s\n", img_path);
         exit(1);
     }
 
-    eng.textures[BG_TEXTURE] = SDL_CreateTextureFromSurface(eng.renderer, img);
-    SDL_FreeSurface(img);
+    if (eng.textures[BG_TEXTURE])
+        SDL_DestroyTexture(eng.textures[BG_TEXTURE]);
 
-    int imgw, imgh;
-    SDL_QueryTexture(eng.textures[BG_TEXTURE],
-            NULL, NULL, &imgw, &imgh);
+    eng.textures[BG_TEXTURE] = SDL_CreateTextureFromSurface(eng.renderer, img);
+
+    int imgw = img->w, imgh = img->h;
+    SDL_FreeSurface(img);
 
     decal_init(
         &(eng.bg_decal),
@@ -29,7 +31,11 @@ void intro_setup()
         0,
         imgw,
         imgh);
+}
 
+void intro_setup()
+{
+    load_bg("assets/intro_img.png");
     eng.num_waypoints = 0;
 
     bg_actor_init(&eng.bg_actor);
@@ -158,29 +164,8 @@ void level1_repeat()
 #include "level2.h"
 void level1_level2_change()
 {
-    SDL_DestroyTexture(eng.textures[BG_TEXTURE]);
     eng.level_bytes = level2_array;
-    static char fname[] = "assets/level2.png";
-    SDL_Surface *img = IMG_Load(fname);
-
-    if(!img){
-        fprintf(stdout, "Error! Could not load %s\n", fname);
-        exit(1);
-    }
-
-    eng.textures[BG_TEXTURE] = SDL_CreateTextureFromSurface(eng.renderer, img);
-    SDL_FreeSurface(img);
-
-    int imgw, imgh;
-    SDL_QueryTexture(eng.textures[BG_TEXTURE],
-            NULL, NULL, &imgw, &imgh);
-    decal_init(
-        &(eng.bg_decal),
-        eng.textures[BG_TEXTURE],
-        0,
-        0,
-        imgw,
-        imgh);
+    load_bg("assets/level2.png");
 
     level2_repeat();
 
@@ -189,11 +174,11 @@ void level1_level2_change()
 
 bool level2_finished()
 {
-    /* if (eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL])
+    if (eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL])
     {
-        eng.scene_change = level1_level2_change;
+        eng.scene_change = level2_level3_change;
         return true;
-    }*/
+    }
     if (eng.active_states[GAME_STATE_LEVEL_RESTART])
     {
         eng.scene_change = level2_repeat;
@@ -213,4 +198,40 @@ void level2_repeat()
     eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
     eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
 
+}
+
+bool level3_finished()
+{
+    // if (eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL])
+    // {
+    //     eng.scene_change = level2_level3_change;
+    //     return true;
+    // }
+    if (eng.active_states[GAME_STATE_LEVEL_RESTART])
+    {
+        eng.scene_change = level3_repeat;
+        return true;
+    }
+    return false;
+}
+
+#include "level3.h"
+void level2_level3_change()
+{
+    load_bg("assets/level3.png");
+
+    level3_repeat();
+    eng.scene_finished = level3_finished;
+}
+
+void level3_repeat()
+{
+#include "level3_waypoint_initial_positions.c"
+    setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
+
+    eng.frames_swimming = 0;
+
+    eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
+    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
+    eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
 }
