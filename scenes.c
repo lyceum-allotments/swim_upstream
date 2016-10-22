@@ -30,6 +30,8 @@ void intro_setup()
         imgw,
         imgh);
 
+    eng.num_waypoints = 0;
+
     bg_actor_init(&eng.bg_actor);
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor), RENDER_ORDER_BG);
     return;
@@ -60,7 +62,6 @@ bool level1_finished()
 #include "level1_setup_helpers.c"
 void intro_change()
 {
-    eng.render_list = actor_list_rm(eng.render_list, (actor *)(&eng.bg_actor));
     SDL_DestroyTexture(eng.textures[BG_TEXTURE]);
 
     setup_textures();
@@ -68,36 +69,85 @@ void intro_change()
 
     eng.level_bytes = level1_array;
 
-    setup_actors();
+    hud_actor_init(&eng.hud_actor);
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor), RENDER_ORDER_HUD);
+    eng.logic_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor), 0);
+
+    fish_actor_init(&eng.fish_actor);
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor), RENDER_ORDER_FISH);
+    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor), 0);
+
+    level1_repeat();
+
     eng.clicked_waypoint = NULL;
     eng.scene_finished = level1_finished;
-
     eng.scene_change = level1_level2_change;
+
     return;
 }
 
-void level1_repeat()
+void clear_waypoints_off_lists()
 {
     int i;
-    for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
+    for (i = 0; i < eng.num_waypoints; i++)
     {
-        eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
-        eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
+        eng.render_list = actor_list_rm(eng.render_list, (actor *)&eng.waypoint_actor[i]);
+        eng.logic_list = actor_list_rm(eng.logic_list, (actor *)&eng.waypoint_actor[i]);
+
+        if (i < eng.num_waypoints - 1)
+            eng.render_list = actor_list_rm(eng.render_list, (actor *)&eng.linkline_actor[i]);
+    }
+}
+
+void setup_route(waypoint_desc *wpds, int num_wps)
+{
+    int i;
+
+    clear_waypoints_off_lists();
+    eng.num_waypoints = num_wps;
+
+    for (i = 0; i < eng.num_waypoints; i++)
+    {
+        waypoint_desc *wpd = &wpds[i];
+        if (wpd->is_anchorpoint)
+            anchorpoint_actor_init(&eng.waypoint_actor[i]);
+        else 
+        {
+            waypoint_actor_init(&eng.waypoint_actor[i]);
+            eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor[i]), 0);
+        }
+
+        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.waypoint_actor[i]), RENDER_ORDER_WAYPOINT);
+        eng.waypoint_actor[i].sprite.r[0] = wpd->x;
+        eng.waypoint_actor[i].sprite.r[1] = wpd->y;
     }
 
-    for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
+    for (i = 0; i < eng.num_waypoints - 1; i++)
     {
+        linkline_actor_init(&eng.linkline_actor[i]);
+        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.linkline_actor[i]), RENDER_ORDER_LINKLINE);
+
         int wp_x, wp_y;
         waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
         linkline_actor_move_first_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
+        eng.waypoint_actor[i].linkline_right = &eng.linkline_actor[i];
 
         waypoint_actor_get_pos(&eng.waypoint_actor[i+1], &wp_x, &wp_y);
         linkline_actor_move_second_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
+        eng.waypoint_actor[i+1].linkline_left = &eng.linkline_actor[i];
     }
+    eng.render_list = actor_list_sort(eng.render_list);
+    eng.logic_list = actor_list_sort(eng.logic_list);
 
     fish_actor_update_next_wp_index(&eng.fish_actor, 1);
     eng.fish_actor.next_wp_index = 0;
     eng.fish_actor.fraction_complete = 1;
+}
+
+void level1_repeat()
+{
+#include "level1_waypoint_initial_positions.h"
+    setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
 
     eng.frames_swimming = 0;
 
@@ -108,10 +158,6 @@ void level1_repeat()
 #include "level2.h"
 void level1_level2_change()
 {
-#include "level2_waypoint_initial_positions.c"
-
-    int i;
-
     SDL_DestroyTexture(eng.textures[BG_TEXTURE]);
     eng.level_bytes = level2_array;
     static char fname[] = "assets/level2.png";
@@ -136,35 +182,9 @@ void level1_level2_change()
         imgw,
         imgh);
 
-    for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
-    {
-        eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
-        eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
-    }
-
-    for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
-    {
-        int wp_x, wp_y;
-        waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
-        linkline_actor_move_first_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
-
-        waypoint_actor_get_pos(&eng.waypoint_actor[i+1], &wp_x, &wp_y);
-        linkline_actor_move_second_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
-    }
-
-    fish_actor_update_next_wp_index(&eng.fish_actor, 1);
-    eng.fish_actor.next_wp_index = 0;
-    eng.fish_actor.fraction_complete = 1;
-
-    eng.frames_swimming = 0;
-
-    eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
-    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
-    eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
+    level2_repeat();
 
     eng.scene_finished = level2_finished;
-    // printf("should transition to level 2 here\n");
-    // eng.active_states[GAME_STATE_QUIT] = true;
 }
 
 bool level2_finished()
@@ -185,27 +205,7 @@ bool level2_finished()
 void level2_repeat()
 {
 #include "level2_waypoint_initial_positions.c"
-    int i;
-
-    for (i = 0; i < NUM_WAYPOINT_ACTORS; i++)
-    {
-        eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
-        eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
-    }
-
-    for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
-    {
-        int wp_x, wp_y;
-        waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
-        linkline_actor_move_first_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
-
-        waypoint_actor_get_pos(&eng.waypoint_actor[i+1], &wp_x, &wp_y);
-        linkline_actor_move_second_endpoint_to(&eng.linkline_actor[i], wp_x, wp_y);
-    }
-
-    fish_actor_update_next_wp_index(&eng.fish_actor, 1);
-    eng.fish_actor.next_wp_index = 0;
-    eng.fish_actor.fraction_complete = 1;
+    setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
 
     eng.frames_swimming = 0;
 

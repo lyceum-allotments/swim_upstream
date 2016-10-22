@@ -44,8 +44,7 @@ enum
     LINKLINE_W = 18,
     FISH_W = 50,
     FISH_H = 50,
-    NUM_WAYPOINT_ACTORS = 4,
-    NUM_LINKLINE_ACTORS = NUM_WAYPOINT_ACTORS - 1,
+    MAX_NUM_WAYPOINT_ACTORS = 10,
     TIMER_TEXT_SIZE = 30,
     END_TIME_TEXT_SIZE = 80
 };
@@ -59,6 +58,13 @@ typedef enum RENDER_ORDER // things earlier in this list will be rendered first
     RENDER_ORDER_FISH,
     RENDER_ORDER_HUD
 } RENDER_ORDER;
+
+typedef struct waypoint_desc
+{
+    unsigned int x;
+    unsigned int y;
+    bool is_anchorpoint;
+} waypoint_desc;
 
 #define TIMER_TEXT_FONT "assets/FreeSans.ttf"
 
@@ -105,10 +111,11 @@ struct engine
 
     bg_actor bg_actor;
 
-    waypoint_actor waypoint_actor[NUM_WAYPOINT_ACTORS];
+    waypoint_actor waypoint_actor[MAX_NUM_WAYPOINT_ACTORS];
+    unsigned int num_waypoints;
     waypoint_actor *clicked_waypoint;
 
-    linkline_actor linkline_actor[NUM_LINKLINE_ACTORS];
+    linkline_actor linkline_actor[MAX_NUM_WAYPOINT_ACTORS - 1];
 
     fish_actor fish_actor;
 

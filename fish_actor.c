@@ -32,7 +32,7 @@ void fish_logic_handler(actor *a)
 
     fish_actor *fish = (fish_actor *)a;
 
-    if (fish->next_wp_index == NUM_WAYPOINT_ACTORS)
+    if (fish->next_wp_index == eng.num_waypoints)
     {
         eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
         eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;

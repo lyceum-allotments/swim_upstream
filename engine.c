@@ -97,7 +97,7 @@ void check_waypoint_clicks()
     }
 
     unsigned int i;
-    for (i = 0; i< NUM_WAYPOINT_ACTORS; i++)
+    for (i = 0; i< eng.num_waypoints; i++)
     {
         if (waypoint_actor_touched(
                     &eng.waypoint_actor[i],

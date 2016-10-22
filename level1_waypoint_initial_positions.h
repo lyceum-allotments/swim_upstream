@@ -1,1 +1,1 @@
-static int waypoint_initial_positions[NUM_WAYPOINT_ACTORS][2] = {{200, 0}, {50, 50}, {400, 350}, {600, 500}};
+static waypoint_desc waypoint_desc[] = {{200, 0, true}, {50, 50, false}, {400, 350, false}, {600, 500, true}};
