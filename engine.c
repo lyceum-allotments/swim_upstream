@@ -24,6 +24,7 @@ engine *engine_init()
     eng.should_start_logic_loop = true;
     eng.whole_frames_to_do = 0;
 
+    eng.target_time_ms = 0;
     eng.frames_swimming = 0;
 
     SDL_CreateWindowAndRenderer(eng.w, eng.h, 0, &eng.window, &eng.renderer);
@@ -137,7 +138,7 @@ void process_input()
                 {
                     if (event.key.keysym.sym == SDLK_r)
                         eng.active_states[GAME_STATE_LEVEL_RESTART] = true;
-                    if (event.key.keysym.sym == SDLK_y)
+                    if (eng.active_states[GAME_STATE_PASSED_CHALLENGE] && event.key.keysym.sym == SDLK_y)
                         eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = true;
                 }
                 else if (event.key.keysym.sym == SDLK_RETURN)

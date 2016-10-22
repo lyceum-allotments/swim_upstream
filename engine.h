@@ -30,6 +30,7 @@ typedef enum GAME_STATE
     GAME_STATE_WAYPOINT_CLICKED,
     GAME_STATE_SWIM_IN_PROGRESS,
     GAME_STATE_LEVEL_FINISHED,
+    GAME_STATE_PASSED_CHALLENGE,
     GAME_STATE_LEVEL_RESTART,
     GAME_STATE_QUIT,
     GAME_STATE_INTRO_FINISHED,
@@ -86,6 +87,8 @@ struct engine
     unsigned int whole_frames_to_do;
 
     unsigned int frames_swimming;
+
+    unsigned int target_time_ms;
 
     SDL_Window *window;
     SDL_Renderer *renderer;

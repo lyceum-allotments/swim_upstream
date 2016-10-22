@@ -155,9 +155,11 @@ void level1_repeat()
 #include "level1_waypoint_initial_positions.h"
     setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
 
+    eng.target_time_ms= target_time_ms;
     eng.frames_swimming = 0;
 
     eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
+    eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
     eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
 }
 
@@ -192,9 +194,11 @@ void level2_repeat()
 #include "level2_waypoint_initial_positions.c"
     setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
 
+    eng.target_time_ms= target_time_ms;
     eng.frames_swimming = 0;
 
     eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
+    eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
     eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
     eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
 
@@ -229,9 +233,11 @@ void level3_repeat()
 #include "level3_waypoint_initial_positions.c"
     setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
 
+    eng.target_time_ms= target_time_ms;
     eng.frames_swimming = 0;
 
     eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
     eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
+    eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
     eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
 }

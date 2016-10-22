@@ -6,8 +6,14 @@ typedef struct level_end_screen level_end_screen;
 
 struct level_end_screen {
     TTF_Font *intro_font;
+    SDL_Texture *intro_text_success;
+    SDL_Rect intro_rect_success;
+
+    SDL_Texture *intro_text_failed;
+    SDL_Rect intro_rect_failed;
+
     SDL_Texture *intro_text;
-    SDL_Rect intro_rect;
+    SDL_Rect *intro_rect;
 
     TTF_Font *time_font;
     SDL_Texture *time_text;
