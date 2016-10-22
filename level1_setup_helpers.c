@@ -3,12 +3,12 @@
 
 void setup_actors()
 {
-    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor));
-    eng.logic_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor));
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor), RENDER_ORDER_HUD);
+    eng.logic_list = actor_list_add(eng.render_list, (actor *)(&eng.hud_actor), 0);
     hud_actor_init(&eng.hud_actor);
 
-    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor));
-    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor));
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor), RENDER_ORDER_FISH);
+    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor), 0);
 
     unsigned int i;
 
@@ -19,21 +19,18 @@ void setup_actors()
         else
         {
             waypoint_actor_init(&eng.waypoint_actor[i]);
-            eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor[i]));
+            eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.waypoint_actor[i]), 0);
         }
 
-        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.waypoint_actor[i]));
+        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.waypoint_actor[i]), RENDER_ORDER_WAYPOINT);
         eng.waypoint_actor[i].sprite.r[0] = waypoint_initial_positions[i][0];
         eng.waypoint_actor[i].sprite.r[1] = waypoint_initial_positions[i][1];
     }
 
-    fish_actor_init(&eng.fish_actor);
-
     for (i = 0; i < NUM_LINKLINE_ACTORS; i++)
     {
         linkline_actor_init(&eng.linkline_actor[i]);
-        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.linkline_actor[i]));
-        
+        eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.linkline_actor[i]), RENDER_ORDER_LINKLINE);
 
         int wp_x, wp_y;
         waypoint_actor_get_pos(&eng.waypoint_actor[i], &wp_x, &wp_y);
@@ -45,8 +42,11 @@ void setup_actors()
         eng.waypoint_actor[i+1].linkline_left = &eng.linkline_actor[i];
     }
 
+    fish_actor_init(&eng.fish_actor);
     bg_actor_init(&eng.bg_actor);
-    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor));
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor), RENDER_ORDER_BG);
+
+    eng.render_list = actor_list_sort(eng.render_list);
 }
 
 void setup_textures()

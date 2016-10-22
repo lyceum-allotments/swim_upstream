@@ -31,7 +31,7 @@ void intro_setup()
         imgh);
 
     bg_actor_init(&eng.bg_actor);
-    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor));
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor), RENDER_ORDER_BG);
     return;
 }
 

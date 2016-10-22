@@ -50,6 +50,16 @@ enum
     END_TIME_TEXT_SIZE = 80
 };
 
+typedef enum RENDER_ORDER // things earlier in this list will be rendered first
+                          // (i.e. be further back)
+{
+    RENDER_ORDER_BG,
+    RENDER_ORDER_LINKLINE,
+    RENDER_ORDER_WAYPOINT,
+    RENDER_ORDER_FISH,
+    RENDER_ORDER_HUD
+} RENDER_ORDER;
+
 #define TIMER_TEXT_FONT "assets/FreeSans.ttf"
 
 typedef struct engine engine;

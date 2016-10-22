@@ -16,11 +16,13 @@ struct actor_list
 {
     actor *a;
     actor_list *next;
+    unsigned int priority;
 };
 
 
-actor_list *actor_list_add(actor_list *al, actor *a);
+actor_list *actor_list_add(actor_list *al, actor *a, unsigned int priority);
 actor_list *actor_list_rm(actor_list *al, actor *a);
+actor_list *actor_list_sort(actor_list *al);
 
 actor *actor_init(
         actor *a,
