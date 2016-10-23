@@ -17,7 +17,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="intro.svg"
-   inkscape:export-filename="/home/john/projects/emscripten/swim_upstream/assets/intro_img.png"
+   inkscape:export-filename="/home/john/projects/emscripten/swim_upstream/assets/1p_menu.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -46,6 +46,32 @@
        x2="957.14288"
        y2="1303.7909"
        gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4342"
+       x="-0.13458352"
+       width="1.269167"
+       y="-0.43173072"
+       height="1.8634614">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="13.850673"
+         id="feGaussianBlur4344" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4342-8"
+       x="-0.13458352"
+       width="1.2691669"
+       y="-0.43173072"
+       height="1.8634614">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="13.850673"
+         id="feGaussianBlur4344-7" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -54,9 +80,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="582.14286"
-     inkscape:cy="145.71429"
+     inkscape:zoom="0.7"
+     inkscape:cx="357.67983"
+     inkscape:cy="248.42809"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -74,7 +100,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -102,5 +128,59 @@
            x="59.999996"
            y="148.57143"
            style="font-size:50px;text-align:center;text-anchor:middle;fill:#ba5400;fill-opacity:1;-inkscape-font-specification:'Bitstream Vera Sans Bold';font-family:'Bitstream Vera Sans';font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;" /></flowRegion><flowPara
-         id="flowPara4178">SWIM UPSTREAM</flowPara></flowRoot>  </g>
+         id="flowPara4178">SWIM UPSTREAM</flowPara></flowRoot>    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ff5b00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.00382257;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:6.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;filter:url(#filter4342);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4143-7"
+       width="246.99617"
+       height="76.996178"
+       x="276.50192"
+       y="786.79285"
+       transform="matrix(1.2856602,0,0,1.5044222,-114.26408,-415.38834)" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ff5b00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.00382257;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:6.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;filter:url(#filter4342-8);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4143-7-9"
+       width="246.99617"
+       height="76.996178"
+       x="276.50192"
+       y="786.79285"
+       transform="matrix(1.2856602,0,0,1.5044222,-114.26408,-284.29508)" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#371165;fill-opacity:1;fill-rule:nonzero;stroke:#371165;stroke-width:3.14837933;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:6.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4143-0"
+       width="271.85162"
+       height="76.851624"
+       x="264.07419"
+       y="918.86511" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#371165;fill-opacity:1;fill-rule:nonzero;stroke:#371165;stroke-width:3.14837933;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:6.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4143"
+       width="271.85162"
+       height="76.851624"
+       x="264.07419"
+       y="787.77185" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4172-3"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50px;line-height:125%;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#fce33e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(-63.052246,641.5819)"><flowRegion
+         id="flowRegion4174-6"><rect
+           id="rect4176-7"
+           width="802.85706"
+           height="117.14287"
+           x="59.999996"
+           y="148.57143"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50px;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans Bold';text-align:center;text-anchor:middle;fill:#fce33e;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara4178-5">1p mode</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4172-3-6"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50px;line-height:125%;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans Bold';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#fce33e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(-63.052246,772.67516)"><flowRegion
+         id="flowRegion4174-6-2"><rect
+           id="rect4176-7-6"
+           width="802.85706"
+           height="117.14287"
+           x="59.999996"
+           y="148.57143"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50px;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans Bold';text-align:center;text-anchor:middle;fill:#fce33e;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara4178-5-1">2p mode</flowPara></flowRoot>  </g>
 </svg>

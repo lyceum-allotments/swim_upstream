@@ -40,6 +40,13 @@ void intro_setup()
 
     bg_actor_init(&eng.bg_actor);
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.bg_actor), RENDER_ORDER_BG);
+
+    multiplayer_select_menu_init(&eng.multiplayer_select_menu);
+    eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.multiplayer_select_menu), RENDER_ORDER_MENU);
+
+    eng.render_list = actor_list_sort(eng.render_list);
+
+    eng.active_states[GAME_STATE_IN_INTRO] = true;
     return;
 }
 
@@ -69,6 +76,8 @@ bool level1_finished()
 void intro_change()
 {
     SDL_DestroyTexture(eng.textures[BG_TEXTURE]);
+
+    eng.render_list = actor_list_rm(eng.render_list, (actor *)&eng.multiplayer_select_menu);
 
     setup_textures();
     setup_decals();

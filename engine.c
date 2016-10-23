@@ -37,12 +37,11 @@ engine *engine_init()
     }
 
     eng.textures[BG_TEXTURE] = NULL;
+    setup_active_states();
+
     intro_setup();
     eng.scene_finished = intro_finished;
     eng.scene_change = intro_change;
-
-    setup_active_states();
-
     return &eng;
 }
 
@@ -141,8 +140,20 @@ void process_input()
                     if (eng.active_states[GAME_STATE_PASSED_CHALLENGE] && event.key.keysym.sym == SDLK_y)
                         eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = true;
                 }
-                else if (event.key.keysym.sym == SDLK_RETURN)
-                    eng.active_states[GAME_STATE_INTRO_FINISHED] = true;
+
+                if (eng.active_states[GAME_STATE_IN_INTRO])
+                {
+                    if (event.key.keysym.sym == SDLK_RETURN)
+                        eng.active_states[GAME_STATE_INTRO_FINISHED] = true;
+                    else if (event.key.keysym.sym == SDLK_UP)
+                    {
+                        multiplayer_select_menu_mv_up(&eng.multiplayer_select_menu);
+                    }
+                    else if (event.key.keysym.sym == SDLK_DOWN)
+                    {
+                        multiplayer_select_menu_mv_down(&eng.multiplayer_select_menu);
+                    }
+                }
                 break;
             case SDL_QUIT:
                 eng.active_states[GAME_STATE_QUIT] = true;

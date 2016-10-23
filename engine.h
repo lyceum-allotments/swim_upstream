@@ -10,6 +10,7 @@
 #include "sprite.h"
 #include "actor.h"
 #include "hud_actor.h"
+#include "multiplayer_select_menu.h"
 #include "bg_actor.h"
 #include "linkline_actor.h"
 #include "waypoint_actor.h"
@@ -33,6 +34,7 @@ typedef enum GAME_STATE
     GAME_STATE_PASSED_CHALLENGE,
     GAME_STATE_LEVEL_RESTART,
     GAME_STATE_QUIT,
+    GAME_STATE_IN_INTRO,
     GAME_STATE_INTRO_FINISHED,
     GAME_STATE_PROGRESS_TO_NEXT_LEVEL,
     GAME_STATE_NUM_STATES,
@@ -54,6 +56,7 @@ typedef enum RENDER_ORDER // things earlier in this list will be rendered first
                           // (i.e. be further back)
 {
     RENDER_ORDER_BG,
+    RENDER_ORDER_MENU,
     RENDER_ORDER_LINKLINE,
     RENDER_ORDER_WAYPOINT,
     RENDER_ORDER_FISH,
@@ -123,6 +126,7 @@ struct engine
     fish_actor fish_actor;
 
     hud_actor hud_actor;
+    multiplayer_select_menu multiplayer_select_menu;
 
     const unsigned char *level_bytes;
 };
