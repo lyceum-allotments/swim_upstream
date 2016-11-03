@@ -10,6 +10,13 @@
 #include "sprite.h"
 #include "actor.h"
 #include "hud_actor.h"
+
+typedef enum PLAY_MODE
+{
+    PLAY_MODE_SP,
+    PLAY_MODE_2P
+} PLAY_MODE;
+
 #include "multiplayer_select_menu.h"
 #include "bg_actor.h"
 #include "linkline_actor.h"
@@ -104,6 +111,7 @@ struct engine
     scene_changed_handler scene_change;
 
     bool active_states[GAME_STATE_NUM_STATES];
+    PLAY_MODE play_mode;
 
     actor_list *render_list;
     actor_list *logic_list;

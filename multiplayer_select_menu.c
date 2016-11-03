@@ -53,6 +53,11 @@ void multiplayer_select_menu_render(actor *a)
     sprite_render(&this->two_player_mode_menu_entry);
 }
 
+PLAY_MODE multiplayer_select_menu_get_value(multiplayer_select_menu *this)
+{
+    return (this->selected_index == 0 ? PLAY_MODE_SP : PLAY_MODE_2P);
+}
+
 multiplayer_select_menu *multiplayer_select_menu_mv_up(multiplayer_select_menu *this)
 {
     this->selected_index += 1;

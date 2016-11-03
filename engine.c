@@ -38,6 +38,7 @@ engine *engine_init()
 
     eng.textures[BG_TEXTURE] = NULL;
     setup_active_states();
+    eng.play_mode = PLAY_MODE_SP;
 
     intro_setup();
     eng.scene_finished = intro_finished;
@@ -128,7 +129,7 @@ void process_input()
             case SDL_MOUSEBUTTONUP:
                 eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = false;
                 break;
-            case SDL_KEYDOWN:
+            case SDL_KEYUP:
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
                     if (!eng.active_states[GAME_STATE_LEVEL_FINISHED])
                         eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
@@ -144,7 +145,10 @@ void process_input()
                 if (eng.active_states[GAME_STATE_IN_INTRO])
                 {
                     if (event.key.keysym.sym == SDLK_RETURN)
+                    {
+                        eng.play_mode = multiplayer_select_menu_get_value(&eng.multiplayer_select_menu);
                         eng.active_states[GAME_STATE_INTRO_FINISHED] = true;
+                    }
                     else if (event.key.keysym.sym == SDLK_UP)
                     {
                         multiplayer_select_menu_mv_up(&eng.multiplayer_select_menu);

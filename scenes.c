@@ -92,6 +92,11 @@ void intro_change()
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor), RENDER_ORDER_FISH);
     eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor), 0);
 
+    if (eng.play_mode == PLAY_MODE_2P)
+    {
+        printf("2 player mode selected!\n");
+    }
+
     level1_repeat();
 
     eng.clicked_waypoint = NULL;

@@ -18,6 +18,7 @@ struct multiplayer_select_menu {
 };
 
 multiplayer_select_menu *multiplayer_select_menu_init(multiplayer_select_menu *this);
+PLAY_MODE multiplayer_select_menu_get_value(multiplayer_select_menu *this);
 multiplayer_select_menu *multiplayer_select_menu_mv_up(multiplayer_select_menu *this);
 multiplayer_select_menu *multiplayer_select_menu_mv_down(multiplayer_select_menu *this);
 #endif
