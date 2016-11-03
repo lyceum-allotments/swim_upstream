@@ -168,6 +168,7 @@ void level1_repeat()
 {
 #include "level1_waypoint_initial_positions.h"
     setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
+    eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO] = true;
 
     eng.target_time_ms= target_time_ms;
     eng.frames_swimming = 0;

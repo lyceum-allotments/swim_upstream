@@ -2,6 +2,7 @@
 #define HUD_ACTOR_H
 #include "engine.h"
 #include "level_end_screen.h"
+#include "level_intro_screen.h"
 
 typedef struct hud_actor hud_actor;
 
@@ -12,6 +13,7 @@ struct hud_actor {
     SDL_Texture *timer_text;
 
     level_end_screen level_end_screen;
+    level_intro_screen level_intro_screen;
 };
 
 hud_actor *hud_actor_init(hud_actor *this);

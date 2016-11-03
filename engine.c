@@ -93,7 +93,8 @@ bool should_continue_logic_loops()
 void check_waypoint_clicks()
 {
     if (eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] 
-            || eng.active_states[GAME_STATE_LEVEL_FINISHED])
+            || eng.active_states[GAME_STATE_LEVEL_FINISHED]
+            || eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO])
     {
         return;
     }
@@ -131,8 +132,13 @@ void process_input()
                 break;
             case SDL_KEYUP:
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                    if (!eng.active_states[GAME_STATE_LEVEL_FINISHED])
+                    if (!(eng.active_states[GAME_STATE_LEVEL_FINISHED]
+                                || eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO]))
                         eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
+
+                if (eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO])
+                    if (event.key.keysym.sym == SDLK_RETURN)
+                        eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO] = false;
 
                 if (eng.active_states[GAME_STATE_LEVEL_FINISHED])
                 {
