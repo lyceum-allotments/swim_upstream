@@ -132,9 +132,26 @@ void process_input()
                 break;
             case SDL_KEYUP:
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                    if (!(eng.active_states[GAME_STATE_LEVEL_FINISHED]
-                                || eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO]))
-                        eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
+                {
+                    if (eng.play_mode == PLAY_MODE_SP)
+                    {
+                        if (!(eng.active_states[GAME_STATE_LEVEL_FINISHED]
+                                    || eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO]))
+                            eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
+                    }
+                    else if (!(eng.active_states[GAME_STATE_LEVEL_FINISHED]
+                                    || eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO]))
+                    {
+                        if (eng.active_player == 1)
+                        {
+                            printf("should go to player two's turn\n");
+                        }
+                        else // if eng.active_player == 2
+                        {
+                            eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
+                        }
+                    }
+                }
 
                 if (eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO])
                     if (event.key.keysym.sym == SDLK_RETURN)

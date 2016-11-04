@@ -13,7 +13,7 @@ level_intro_screen *level_intro_screen_init(level_intro_screen *this)
     return this;
 }
 
-level_intro_screen *level_intro_screen_refresh_text(level_intro_screen *this)
+level_intro_screen *level_intro_screen_refresh_text_sp(level_intro_screen *this)
 {
     SDL_Color fg = {0,0,0,255};
     SDL_Surface *temp_surface = TTF_RenderText_Blended(this->heading_font, "Ready? Press Enter!", fg);
@@ -36,6 +36,44 @@ level_intro_screen *level_intro_screen_refresh_text(level_intro_screen *this)
     this->body_rect.x = (eng.w - this->body_rect.w)/2;
     this->body_rect.y = this->heading_rect.y + this->heading_rect.h;
 
+    return this;
+}
+
+level_intro_screen *level_intro_screen_refresh_text_2p(level_intro_screen *this)
+{
+    char msg[256];
+    SDL_Color fg = {0,0,0,255};
+
+    sprintf(msg, "Player %d's turn", eng.active_player);
+    SDL_Surface *temp_surface = TTF_RenderText_Blended(this->heading_font, msg, fg);
+
+    this->heading_text = SDL_CreateTextureFromSurface(eng.renderer, temp_surface);
+    SDL_FreeSurface(temp_surface);
+
+    SDL_QueryTexture(this->heading_text, NULL, NULL, &this->heading_rect.w, &this->heading_rect.h);
+
+    this->heading_rect.x = (eng.w - this->heading_rect.w)/2;
+    this->heading_rect.y = 0.25 * eng.h;
+
+    temp_surface = TTF_RenderText_Blended(this->body_font, "Press enter to start, press space when done", fg);
+    this->body_text = SDL_CreateTextureFromSurface(eng.renderer, temp_surface);
+    SDL_FreeSurface(temp_surface);
+
+    SDL_QueryTexture(this->body_text, NULL, NULL, &this->body_rect.w, &this->body_rect.h);
+
+    this->body_rect.x = (eng.w - this->body_rect.w)/2;
+    this->body_rect.y = this->heading_rect.y + this->heading_rect.h;
+
+    return this;
+    
+}
+
+level_intro_screen *level_intro_screen_refresh_text(level_intro_screen *this)
+{
+    if (eng.play_mode == PLAY_MODE_SP)
+        level_intro_screen_refresh_text_sp(this);
+    else
+        level_intro_screen_refresh_text_2p(this);
     return this;
 }
 

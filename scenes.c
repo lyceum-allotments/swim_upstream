@@ -169,6 +169,9 @@ void level_light_setup(waypoint_desc *waypoints, unsigned int waypoints_size, un
     setup_route(waypoints, waypoints_size);
     eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO] = true;
 
+    if (eng.play_mode == PLAY_MODE_2P)
+        eng.active_player = 1;
+
     eng.target_time_ms= target_time_ms;
     eng.frames_swimming = 0;
     level_intro_screen_refresh_text(&eng.hud_actor.level_intro_screen);
@@ -177,6 +180,7 @@ void level_light_setup(waypoint_desc *waypoints, unsigned int waypoints_size, un
     eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
     eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
     eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
+
 }
 
 void level1_repeat()

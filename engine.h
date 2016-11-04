@@ -113,6 +113,7 @@ struct engine
 
     bool active_states[GAME_STATE_NUM_STATES];
     PLAY_MODE play_mode;
+    unsigned int active_player;
 
     actor_list *render_list;
     actor_list *logic_list;
