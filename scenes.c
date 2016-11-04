@@ -164,18 +164,25 @@ void setup_route(waypoint_desc *wpds, int num_wps)
     eng.fish_actor.fraction_complete = 1;
 }
 
-void level1_repeat()
+void level_light_setup(waypoint_desc *waypoints, unsigned int waypoints_size, unsigned int target_time_ms)
 {
-#include "level1_waypoint_initial_positions.h"
-    setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
+    setup_route(waypoints, waypoints_size);
     eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO] = true;
 
     eng.target_time_ms= target_time_ms;
     eng.frames_swimming = 0;
+    level_intro_screen_refresh_text(&eng.hud_actor.level_intro_screen);
 
-    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
+    eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
     eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
+    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
     eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
+}
+
+void level1_repeat()
+{
+#include "level1_waypoint_initial_positions.h"
+    level_light_setup(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]), target_time_ms);
 }
 
 #include "level2.h"
@@ -207,16 +214,7 @@ bool level2_finished()
 void level2_repeat()
 {
 #include "level2_waypoint_initial_positions.c"
-    setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
-
-    eng.target_time_ms= target_time_ms;
-    eng.frames_swimming = 0;
-
-    eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
-    eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
-    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
-    eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
-
+    level_light_setup(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]), target_time_ms);
 }
 
 bool level3_finished()
@@ -246,13 +244,5 @@ void level2_level3_change()
 void level3_repeat()
 {
 #include "level3_waypoint_initial_positions.c"
-    setup_route(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]));
-
-    eng.target_time_ms= target_time_ms;
-    eng.frames_swimming = 0;
-
-    eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = false;
-    eng.active_states[GAME_STATE_LEVEL_FINISHED] = false;
-    eng.active_states[GAME_STATE_PASSED_CHALLENGE] = false;
-    eng.active_states[GAME_STATE_LEVEL_RESTART] = false;
+    level_light_setup(waypoint_desc, sizeof(waypoint_desc)/sizeof(waypoint_desc[0]), target_time_ms);
 }

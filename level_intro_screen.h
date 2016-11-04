@@ -16,5 +16,6 @@ struct level_intro_screen {
 };
 
 level_intro_screen *level_intro_screen_init(level_intro_screen *this);
+level_intro_screen *level_intro_screen_refresh_text(level_intro_screen *this);
 level_intro_screen *level_intro_screen_render(level_intro_screen *this);
 #endif
