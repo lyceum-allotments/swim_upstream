@@ -7,4 +7,6 @@ void intro_setup();
 bool intro_finished();
 
 void intro_change();
+
+void activate_route();
 #endif

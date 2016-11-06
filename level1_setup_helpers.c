@@ -2,17 +2,19 @@
 
 void setup_textures()
 {
-    char * filenames[] = {
+    const char * filenames[] = {
         "assets/level1.png",
         "assets/waypoint.png",
+        "assets/waypoint_inactive.png",
         "assets/anchorpoint.png",
         "assets/linkline.png",
+        "assets/linkline_inactive.png",
         "assets/fish.png"
     };
     int i;
 
     for (i = 0; i < sizeof(filenames) / sizeof(filenames[0]); i++) {
-        char * fname = filenames[i];
+        const char * fname = filenames[i];
         SDL_Surface *img = IMG_Load(fname);
 
         if(!img){
@@ -49,6 +51,14 @@ void setup_decals()
         WAYPOINT_H);
 
     decal_init(
+        &(eng.waypoint_inactive_decal),
+        eng.textures[WAYPOINT_INACTIVE_TEXTURE],
+        0,
+        0,
+        WAYPOINT_W,
+        WAYPOINT_H);
+
+    decal_init(
         &(eng.anchorpoint_decal),
         eng.textures[ANCHORPOINT_TEXTURE],
         0,
@@ -62,6 +72,14 @@ void setup_decals()
     decal_init(
         &(eng.linkline_decal),
         eng.textures[LINKLINE_TEXTURE],
+        0,
+        0,
+        imgw,
+        imgh);
+
+    decal_init(
+        &(eng.linkline_inactive_decal),
+        eng.textures[LINKLINE_INACTIVE_TEXTURE],
         0,
         0,
         imgw,

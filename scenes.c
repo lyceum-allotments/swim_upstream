@@ -186,6 +186,21 @@ void inactivate_route(unsigned int player_i)
     }
 }
 
+void activate_route(unsigned int player_i)
+{
+    int i;
+
+    for (i = 0; i < eng.num_waypoints; i++)
+    {
+        waypoint_actor_make_active(&eng.waypoint_actor[player_i][i]);
+
+        if (i < eng.num_waypoints - 1)
+        {
+            linkline_actor_make_active(&eng.linkline_actor[player_i][i]);
+        }
+    }
+}
+
 void level_light_setup(waypoint_desc *waypoints, unsigned int waypoints_size, unsigned int target_time_ms)
 {
     if (eng.active_states[GAME_STATE_TRANSITION_TO_P2])

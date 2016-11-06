@@ -50,6 +50,12 @@ void linkline_actor_move_second_endpoint_to(linkline_actor *this, int x, int y)
 
 linkline_actor *linkline_actor_make_inactive(linkline_actor *this)
 {
-    printf("should be making the linkline actor look inactive here\n");
+    sprite_set_decal(&this->sprite, &eng.linkline_inactive_decal);
+    return this;
+}
+
+linkline_actor *linkline_actor_make_active(linkline_actor *this)
+{
+    sprite_set_decal(&this->sprite, &eng.linkline_decal);
     return this;
 }

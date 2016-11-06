@@ -75,6 +75,12 @@ waypoint_actor *anchorpoint_actor_init(waypoint_actor *this)
 
 waypoint_actor *waypoint_actor_make_inactive(waypoint_actor *this)
 {
-    printf("should be changing the waypoint sprite to look inactive here\n");
+    sprite_set_decal(&this->sprite, &eng.waypoint_inactive_decal);
+    return this;
+}
+
+waypoint_actor *waypoint_actor_make_active(waypoint_actor *this)
+{
+    sprite_set_decal(&this->sprite, &eng.waypoint_decal);
     return this;
 }

@@ -27,8 +27,10 @@ enum
 {
     BG_TEXTURE,
     WAYPOINT_TEXTURE,
+    WAYPOINT_INACTIVE_TEXTURE,
     ANCHORPOINT_TEXTURE,
     LINKLINE_TEXTURE,
+    LINKLINE_INACTIVE_TEXTURE,
     FISH_TEXTURE,
     NUM_TEXTURES
 };
@@ -125,8 +127,10 @@ struct engine
     SDL_Texture *textures[NUM_TEXTURES];
     decal bg_decal;
     decal waypoint_decal;
+    decal waypoint_inactive_decal;
     decal anchorpoint_decal;
     decal linkline_decal;
+    decal linkline_inactive_decal;
     decal fish_decal;
 
     bg_actor bg_actor;

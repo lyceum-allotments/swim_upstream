@@ -149,6 +149,7 @@ void process_input()
                         }
                         else // if eng.active_player_i == 1
                         {
+                            activate_route(0);
                             eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
                         }
                     }
