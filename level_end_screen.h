@@ -12,6 +12,12 @@ struct level_end_screen {
     SDL_Texture *intro_text_failed;
     SDL_Rect intro_rect_failed;
 
+    SDL_Texture *intro_text_p1_win;
+    SDL_Rect intro_rect_p1_win;
+
+    SDL_Texture *intro_text_p2_win;
+    SDL_Rect intro_rect_p2_win;
+
     SDL_Texture *intro_text;
     SDL_Rect *intro_rect;
 

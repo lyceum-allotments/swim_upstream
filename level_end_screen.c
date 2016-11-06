@@ -1,30 +1,39 @@
 #include "engine.h"
 
+void level_end_screen_create_intro_text(level_end_screen *this, SDL_Texture **target_texure, SDL_Rect *target_rect, const char *string)
+{
+    SDL_Color fg = {0,0,0,255};
+    SDL_Surface *temp_surface = TTF_RenderText_Blended(this->intro_font, string, fg);
+    *target_texure = SDL_CreateTextureFromSurface(eng.renderer, temp_surface);
+
+    SDL_FreeSurface(temp_surface);
+
+    SDL_QueryTexture(*target_texure, NULL, NULL, &target_rect->w, &target_rect->h);
+    target_rect->x = (eng.w - target_rect->w)/2;
+    target_rect->y = 0.3 * eng.h;
+}
+
 level_end_screen *level_end_screen_init(level_end_screen *this)
 {
-    this->intro_font = TTF_OpenFont(TIMER_TEXT_FONT, TIMER_TEXT_SIZE);
+    if (eng.play_mode == PLAY_MODE_SP)
+    {
+        this->intro_font = TTF_OpenFont(TIMER_TEXT_FONT, TIMER_TEXT_SIZE);
+        this->time_font = TTF_OpenFont(TIMER_TEXT_FONT, END_TIME_TEXT_SIZE);
+    }
+    else
+    {
+        this->intro_font = TTF_OpenFont(TIMER_TEXT_FONT, END_TIME_TEXT_SIZE);
+        this->time_font = TTF_OpenFont(TIMER_TEXT_FONT, TIMER_TEXT_SIZE);
+    }
 
-    SDL_Color fg = {0,0,0,255};
-    SDL_Surface *temp_surface = TTF_RenderText_Blended(this->intro_font, "Challenge complete! Your time was:", fg);
-    this->intro_text_success = SDL_CreateTextureFromSurface(eng.renderer, temp_surface);
+    level_end_screen_create_intro_text(this, &this->intro_text_success, &this->intro_rect_success, "Challenge complete! Your time was:");
+    level_end_screen_create_intro_text(this, &this->intro_text_failed, &this->intro_rect_failed, "Challenge failed! Your time was:");
 
-    SDL_FreeSurface(temp_surface);
+    level_end_screen_create_intro_text(this, &this->intro_text_p1_win, &this->intro_rect_p1_win, "P1 wins!");
+    level_end_screen_create_intro_text(this, &this->intro_text_p2_win, &this->intro_rect_p2_win, "P2 wins!");
 
-    SDL_QueryTexture(this->intro_text_success, NULL, NULL, &this->intro_rect_success.w, &this->intro_rect_success.h);
-    this->intro_rect_success.x = (eng.w - this->intro_rect_success.w)/2;
-    this->intro_rect_success.y = 0.3 * eng.h;
+    this->intro_rect = &this->intro_rect_success;
 
-
-    temp_surface = TTF_RenderText_Blended(this->intro_font, "Challenge failed! Your time was:", fg);
-    this->intro_text_failed = SDL_CreateTextureFromSurface(eng.renderer, temp_surface);
-
-    SDL_FreeSurface(temp_surface);
-
-    SDL_QueryTexture(this->intro_text_failed, NULL, NULL, &this->intro_rect_failed.w, &this->intro_rect_failed.h);
-    this->intro_rect_failed.x = (eng.w - this->intro_rect_failed.w)/2;
-    this->intro_rect_failed.y = 0.3 * eng.h;
-
-    this->time_font = TTF_OpenFont(TIMER_TEXT_FONT, END_TIME_TEXT_SIZE);
     level_end_screen_time_refresh(this);
     return this;
 }
@@ -40,19 +49,40 @@ level_end_screen *level_end_screen_time_refresh(level_end_screen *this)
 {
     SDL_Color fg = {0,0,0,255};
 
-    if (eng.active_states[GAME_STATE_PASSED_CHALLENGE])
+    if (eng.play_mode == PLAY_MODE_SP)
     {
-        this->intro_text = this->intro_text_success;
-        this->intro_rect = &this->intro_rect_success;
+        if (eng.active_states[GAME_STATE_PASSED_CHALLENGE])
+        {
+            this->intro_text = this->intro_text_success;
+            this->intro_rect = &this->intro_rect_success;
+        }
+        else
+        {
+            this->intro_text = this->intro_text_failed;
+            this->intro_rect = &this->intro_rect_failed;
+        }
     }
-    else
+    else if (eng.active_states[GAME_STATE_LEVEL_FINISHED])
     {
-        this->intro_text = this->intro_text_failed;
-        this->intro_rect = &this->intro_rect_failed;
+        if (eng.fish_actor[0].finish_frames < eng.fish_actor[1].finish_frames)
+        {
+            this->intro_text = this->intro_text_p1_win;
+            this->intro_rect = &this->intro_rect_p1_win;
+        }
+        else
+        {
+            this->intro_text = this->intro_text_p2_win;
+            this->intro_rect = &this->intro_rect_p2_win;
+        }
     }
 
     char msg[201];
-    sprintf(msg, "%.2f", (double)eng.frames_swimming/(double)eng.fps);
+    if (eng.play_mode == PLAY_MODE_SP)
+        sprintf(msg, "%.2f", (double)eng.frames_swimming/(double)eng.fps);
+    else 
+        sprintf(msg, "P1: %.2f P2: %.2f", (double)eng.fish_actor[0].finish_frames/(double)eng.fps,
+                                          (double)eng.fish_actor[1].finish_frames/(double)eng.fps);
+
     SDL_Surface *temp_surface = TTF_RenderText_Blended(this->time_font, msg, fg);
     if (this->time_text)
         SDL_DestroyTexture(this->time_text);

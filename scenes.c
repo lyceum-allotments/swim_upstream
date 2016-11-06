@@ -93,12 +93,8 @@ void intro_change()
     eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor[0]), 0);
 
     fish_actor_init(&eng.fish_actor[1], 1);
-    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor[1]), 0);
-
     if (eng.play_mode == PLAY_MODE_2P)
-    {
-        printf("2 player mode selected!\n");
-    }
+        eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor[1]), 0);
 
     level1_repeat();
 

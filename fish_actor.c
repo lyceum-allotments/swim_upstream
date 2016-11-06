@@ -26,11 +26,13 @@ void calculate_direction_and_distance(fish_actor *this)
 
 void fish_logic_handler(actor *a)
 {
+    fish_actor *fish = (fish_actor *)a;
+
     if (!eng.active_states[GAME_STATE_SWIM_IN_PROGRESS]
-            || eng.active_states[GAME_STATE_LEVEL_FINISHED])
+            || eng.active_states[GAME_STATE_LEVEL_FINISHED]
+            || fish->finish_frames > 0)
         return;
 
-    fish_actor *fish = (fish_actor *)a;
 
     if (fish->next_wp_index == eng.num_waypoints)
     {
@@ -54,7 +56,6 @@ void fish_logic_handler(actor *a)
                 eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
                 eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
                 level_end_screen_time_refresh(&eng.hud_actor.level_end_screen);
-                printf("the whole thing is finished\n");
             }
         }
         return;
