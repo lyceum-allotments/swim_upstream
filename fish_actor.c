@@ -34,13 +34,29 @@ void fish_logic_handler(actor *a)
 
     if (fish->next_wp_index == eng.num_waypoints)
     {
-        eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
-        eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
-        if ((double)eng.frames_swimming / (double)eng.fps * 1000 < (double)eng.target_time_ms)
+        if (eng.play_mode == PLAY_MODE_SP)
         {
-            eng.active_states[GAME_STATE_PASSED_CHALLENGE] = true;
+            eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
+            eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
+            if ((double)eng.frames_swimming / (double)eng.fps * 1000 < (double)eng.target_time_ms)
+            {
+                eng.active_states[GAME_STATE_PASSED_CHALLENGE] = true;
+            }
+            level_end_screen_time_refresh(&eng.hud_actor.level_end_screen);
         }
-        level_end_screen_time_refresh(&eng.hud_actor.level_end_screen);
+        else
+        {
+            fish->finish_frames = eng.frames_swimming;
+
+            // check if other fish has finished
+            if (eng.fish_actor[(fish->player_i + 1) % NUM_PLAYERS].finish_frames)
+            {
+                eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = false;
+                eng.active_states[GAME_STATE_LEVEL_FINISHED] = true;
+                level_end_screen_time_refresh(&eng.hud_actor.level_end_screen);
+                printf("the whole thing is finished\n");
+            }
+        }
         return;
     }
 
@@ -76,11 +92,24 @@ fish_actor *fish_actor_update_next_wp_index(fish_actor * this, int wp_index)
 fish_actor *fish_actor_init(fish_actor *this, unsigned int player_i)
 {
     actor_init(&this->a, fish_render_handler, fish_logic_handler);
-    sprite_init(
-            &this->sprite,
-            FISH_W,
-            FISH_H,
-            &eng.fish_decal);
+    switch (player_i)
+    {
+        case 0:
+            sprite_init(
+                    &this->sprite,
+                    FISH_W,
+                    FISH_H,
+                    &eng.fish_decal);
+            break;
+        case 1:
+            sprite_init(
+                    &this->sprite,
+                    FISH_W,
+                    FISH_H,
+                    &eng.fish_2_decal);
+            break;
+    }
+
     this->sprite.r[0] = 0;
     this->sprite.r[1] = 0;
 
@@ -97,6 +126,7 @@ fish_actor *fish_actor_init(fish_actor *this, unsigned int player_i)
     this->speed = 0.25;
 
     this->fraction_complete = 1;
+    this->finish_frames = 0;
 
     return this;
 }

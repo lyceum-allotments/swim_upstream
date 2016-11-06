@@ -9,7 +9,8 @@ void setup_textures()
         "assets/anchorpoint.png",
         "assets/linkline.png",
         "assets/linkline_inactive.png",
-        "assets/fish.png"
+        "assets/fish.png",
+        "assets/fish2.png",
     };
     int i;
 
@@ -88,6 +89,14 @@ void setup_decals()
     decal_init(
         &(eng.fish_decal),
         eng.textures[FISH_TEXTURE],
+        0,
+        0,
+        FISH_W,
+        FISH_H);
+
+    decal_init(
+        &(eng.fish_2_decal),
+        eng.textures[FISH_2_TEXTURE],
         0,
         0,
         FISH_W,

@@ -92,6 +92,9 @@ void intro_change()
     eng.render_list = actor_list_add(eng.render_list, (actor *)(&eng.fish_actor[0]), RENDER_ORDER_FISH);
     eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor[0]), 0);
 
+    fish_actor_init(&eng.fish_actor[1], 1);
+    eng.logic_list = actor_list_add(eng.logic_list, (actor *)(&eng.fish_actor[1]), 0);
+
     if (eng.play_mode == PLAY_MODE_2P)
     {
         printf("2 player mode selected!\n");
@@ -206,8 +209,9 @@ void level_light_setup(waypoint_desc *waypoints, unsigned int waypoints_size, un
     if (eng.active_states[GAME_STATE_TRANSITION_TO_P2])
     {
         inactivate_route(eng.active_player_i);
+        eng.render_list = actor_list_rm(eng.render_list, (actor *)&eng.fish_actor[0]);
+        eng.render_list = actor_list_add(eng.render_list, (actor *)&eng.fish_actor[1], RENDER_ORDER_FISH);
         eng.active_player_i = 1;
-        // TODO make old route look inactive and greyed out
     }
     else
     {

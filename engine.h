@@ -32,6 +32,7 @@ enum
     LINKLINE_TEXTURE,
     LINKLINE_INACTIVE_TEXTURE,
     FISH_TEXTURE,
+    FISH_2_TEXTURE,
     NUM_TEXTURES
 };
 
@@ -132,6 +133,7 @@ struct engine
     decal linkline_decal;
     decal linkline_inactive_decal;
     decal fish_decal;
+    decal fish_2_decal;
 
     bg_actor bg_actor;
 

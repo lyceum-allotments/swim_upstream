@@ -16,6 +16,8 @@ struct fish_actor {
     double total_distance_to_travel;
     double fraction_complete;
 
+    unsigned int finish_frames;
+
     int next_wp_index;
 };
 

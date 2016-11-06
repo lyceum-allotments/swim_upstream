@@ -150,6 +150,8 @@ void process_input()
                         else // if eng.active_player_i == 1
                         {
                             activate_route(0);
+                            eng.render_list = actor_list_add(eng.render_list, (actor *)&eng.fish_actor[0], RENDER_ORDER_FISH);
+                            eng.render_list = actor_list_sort(eng.render_list);
                             eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
                         }
                     }
