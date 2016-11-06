@@ -8,6 +8,7 @@ struct fish_actor {
     actor a;
     sprite sprite;
 
+    unsigned int player_i;
     double pos[2];
     double speed;
 
@@ -18,6 +19,6 @@ struct fish_actor {
     int next_wp_index;
 };
 
-fish_actor *fish_actor_init(fish_actor *this);
+fish_actor *fish_actor_init(fish_actor *this, unsigned int player_i);
 fish_actor *fish_actor_update_next_wp_index(fish_actor *this, int wp_index);
 #endif

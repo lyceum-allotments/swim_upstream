@@ -44,7 +44,7 @@ level_intro_screen *level_intro_screen_refresh_text_2p(level_intro_screen *this)
     char msg[256];
     SDL_Color fg = {0,0,0,255};
 
-    sprintf(msg, "Player %d's turn", eng.active_player);
+    sprintf(msg, "Player %d's turn", eng.active_player_i + 1);
     SDL_Surface *temp_surface = TTF_RenderText_Blended(this->heading_font, msg, fg);
 
     this->heading_text = SDL_CreateTextureFromSurface(eng.renderer, temp_surface);

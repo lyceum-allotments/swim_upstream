@@ -14,4 +14,5 @@ struct linkline_actor {
 linkline_actor *linkline_actor_init(linkline_actor *wpa);
 void linkline_actor_move_first_endpoint_to(linkline_actor *this, int x, int y);
 void linkline_actor_move_second_endpoint_to(linkline_actor *this, int x, int y);
+linkline_actor *linkline_actor_make_inactive(linkline_actor *this);
 #endif

@@ -72,3 +72,9 @@ waypoint_actor *anchorpoint_actor_init(waypoint_actor *this)
 
     return this;
 }
+
+waypoint_actor *waypoint_actor_make_inactive(waypoint_actor *this)
+{
+    printf("should be changing the waypoint sprite to look inactive here\n");
+    return this;
+}

@@ -2,8 +2,8 @@
 
 void linkline_render_handler(actor *a)
 {
-    waypoint_actor *wpa = (waypoint_actor *)a;
-    sprite_render(&(wpa->sprite));
+    linkline_actor *la = (linkline_actor *)a;
+    sprite_render(&(la->sprite));
 }
 
 linkline_actor *linkline_actor_init(linkline_actor *lla)
@@ -46,4 +46,10 @@ void linkline_actor_move_second_endpoint_to(linkline_actor *this, int x, int y)
     this->endpoint[1][0] = x;
     this->endpoint[1][1] = y;
     linkline_actor_refresh_sprite(this);
+}
+
+linkline_actor *linkline_actor_make_inactive(linkline_actor *this)
+{
+    printf("should be making the linkline actor look inactive here\n");
+    return this;
 }

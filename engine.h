@@ -46,6 +46,7 @@ typedef enum GAME_STATE
     GAME_STATE_PROGRESS_TO_NEXT_LEVEL,
     GAME_STATE_NUM_STATES,
     GAME_STATE_SHOW_LEVEL_INTRO,
+    GAME_STATE_TRANSITION_TO_P2,
 } GAME_STATE;
 
 enum
@@ -55,6 +56,7 @@ enum
     LINKLINE_W = 18,
     FISH_W = 50,
     FISH_H = 50,
+    NUM_PLAYERS = 2,
     MAX_NUM_WAYPOINT_ACTORS = 10,
     TIMER_TEXT_SIZE = 30,
     END_TIME_TEXT_SIZE = 80
@@ -65,6 +67,8 @@ typedef enum RENDER_ORDER // things earlier in this list will be rendered first
 {
     RENDER_ORDER_BG,
     RENDER_ORDER_MENU,
+    RENDER_ORDER_INACTIVE_LINKLINE,
+    RENDER_ORDER_INACTIVE_WAYPOINT,
     RENDER_ORDER_LINKLINE,
     RENDER_ORDER_WAYPOINT,
     RENDER_ORDER_FISH,
@@ -113,7 +117,7 @@ struct engine
 
     bool active_states[GAME_STATE_NUM_STATES];
     PLAY_MODE play_mode;
-    unsigned int active_player;
+    unsigned int active_player_i;
 
     actor_list *render_list;
     actor_list *logic_list;
@@ -127,13 +131,14 @@ struct engine
 
     bg_actor bg_actor;
 
-    waypoint_actor waypoint_actor[MAX_NUM_WAYPOINT_ACTORS];
+    waypoint_actor waypoint_actor[NUM_PLAYERS][MAX_NUM_WAYPOINT_ACTORS];
+
     unsigned int num_waypoints;
     waypoint_actor *clicked_waypoint;
 
-    linkline_actor linkline_actor[MAX_NUM_WAYPOINT_ACTORS - 1];
+    linkline_actor linkline_actor[NUM_PLAYERS][MAX_NUM_WAYPOINT_ACTORS - 1];
 
-    fish_actor fish_actor;
+    fish_actor fish_actor[NUM_PLAYERS];
 
     hud_actor hud_actor;
     multiplayer_select_menu multiplayer_select_menu;

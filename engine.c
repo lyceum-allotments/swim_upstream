@@ -7,6 +7,7 @@
 
 void setup_active_states();
 void loop_handler();
+void transition_to_p2();
 
 engine *engine_init()
 {
@@ -103,11 +104,11 @@ void check_waypoint_clicks()
     for (i = 0; i< eng.num_waypoints; i++)
     {
         if (waypoint_actor_touched(
-                    &eng.waypoint_actor[i],
+                    &eng.waypoint_actor[eng.active_player_i][i],
                     eng.x_mouse, eng.y_mouse))
         {
             eng.active_states[GAME_STATE_WAYPOINT_CLICKED] = true;
-            eng.clicked_waypoint = &eng.waypoint_actor[i];
+            eng.clicked_waypoint = &eng.waypoint_actor[eng.active_player_i][i];
         }
     }
 }
@@ -142,11 +143,11 @@ void process_input()
                     else if (!(eng.active_states[GAME_STATE_LEVEL_FINISHED]
                                     || eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO]))
                     {
-                        if (eng.active_player == 1)
+                        if (eng.active_player_i == 0)
                         {
-                            printf("should go to player two's turn\n");
+                            eng.active_states[GAME_STATE_TRANSITION_TO_P2] = true;
                         }
-                        else // if eng.active_player == 2
+                        else // if eng.active_player_i == 1
                         {
                             eng.active_states[GAME_STATE_SWIM_IN_PROGRESS] = true;
                         }
@@ -219,4 +220,12 @@ void loop_handler()
     }
 
     SDL_RenderPresent(eng.renderer);
+}
+
+void transition_to_p2()
+{
+    eng.active_player_i = 1;
+
+    level_intro_screen_refresh_text(&eng.hud_actor.level_intro_screen);
+    eng.active_states[GAME_STATE_SHOW_LEVEL_INTRO] = true;
 }

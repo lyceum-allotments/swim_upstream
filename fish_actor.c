@@ -13,8 +13,8 @@ void fish_render_handler(actor *a)
 void calculate_direction_and_distance(fish_actor *this)
 {
     int x_from, y_from, x_to, y_to;
-    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index-1], &x_from, &y_from);
-    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index], &x_to, &y_to);
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->player_i][this->next_wp_index-1], &x_from, &y_from);
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->player_i][this->next_wp_index], &x_to, &y_to);
 
     this->direction[0] = (double)(x_to - x_from);
     this->direction[1] = (double)(y_to - y_from);
@@ -64,7 +64,7 @@ fish_actor *fish_actor_update_next_wp_index(fish_actor * this, int wp_index)
     this->next_wp_index = wp_index;
 
     int x, y;
-    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index-1], &x, &y);
+    waypoint_actor_get_pos(&eng.waypoint_actor[this->player_i][this->next_wp_index-1], &x, &y);
     this->pos[0] = (double)x;
     this->pos[1] = (double)y;
 
@@ -73,7 +73,7 @@ fish_actor *fish_actor_update_next_wp_index(fish_actor * this, int wp_index)
     return this;
 }
 
-fish_actor *fish_actor_init(fish_actor *this)
+fish_actor *fish_actor_init(fish_actor *this, unsigned int player_i)
 {
     actor_init(&this->a, fish_render_handler, fish_logic_handler);
     sprite_init(
@@ -84,10 +84,11 @@ fish_actor *fish_actor_init(fish_actor *this)
     this->sprite.r[0] = 0;
     this->sprite.r[1] = 0;
 
+    this->player_i = player_i;
     this->next_wp_index = 0;
 
     int x, y;
-    waypoint_actor_get_pos(&eng.waypoint_actor[this->next_wp_index], &x, &y);
+    waypoint_actor_get_pos(&eng.waypoint_actor[player_i][this->next_wp_index], &x, &y);
     this->pos[0] = (double)x;
     this->pos[1] = (double)y;
     this->direction[0] = 0;
