@@ -161,9 +161,7 @@ void setup_route(waypoint_desc *wpds, int num_wps)
     eng.render_list = actor_list_sort(eng.render_list);
     eng.logic_list = actor_list_sort(eng.logic_list);
 
-    fish_actor_update_next_wp_index(&eng.fish_actor[eng.active_player_i], 1);
-    eng.fish_actor[eng.active_player_i].next_wp_index = 0;
-    eng.fish_actor[eng.active_player_i].fraction_complete = 1;
+    fish_actor_init(&eng.fish_actor[eng.active_player_i], eng.active_player_i);
 }
 
 void inactivate_route(unsigned int player_i)
@@ -211,6 +209,7 @@ void level_light_setup(waypoint_desc *waypoints, unsigned int waypoints_size, un
     }
     else
     {
+        eng.render_list = actor_list_rm(eng.render_list, (actor *)&eng.fish_actor[1]);
         eng.active_player_i = 0;
         clear_waypoints_off_lists();
     }

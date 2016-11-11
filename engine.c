@@ -165,7 +165,8 @@ void process_input()
                 {
                     if (event.key.keysym.sym == SDLK_r)
                         eng.active_states[GAME_STATE_LEVEL_RESTART] = true;
-                    if (eng.active_states[GAME_STATE_PASSED_CHALLENGE] && event.key.keysym.sym == SDLK_y)
+                    if (event.key.keysym.sym == SDLK_y && (eng.active_states[GAME_STATE_PASSED_CHALLENGE]
+                            || eng.play_mode == PLAY_MODE_2P))
                         eng.active_states[GAME_STATE_PROGRESS_TO_NEXT_LEVEL] = true;
                 }
 
